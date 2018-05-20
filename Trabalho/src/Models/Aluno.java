@@ -16,6 +16,11 @@ public class Aluno implements InterfaceManter {
     public Aluno() {
         super();
     }
+    
+    public Aluno(String nome){
+        this();
+        this.setNome(nome);
+    }
 
     public Aluno(String nome, String curso, String contato, boolean situacao, String email) {
         this.setContato(contato);
