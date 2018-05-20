@@ -30,7 +30,7 @@ public class ExemplarDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("INSERT INTO `exemplar`(`id`, `livro`, `situaco`) VALUES (?, ?, ?)");
+            stmt = conexao.prepareStatement("INSERT INTO `exemplar`(`id`, `livro`, `situacao`) VALUES (?, ?, ?)");
             stmt.setInt(1, exemplar.getId());
             stmt.setInt(2, exemplar.getLivro().getId());
             stmt.setBoolean(3, exemplar.isSituacao());
@@ -50,7 +50,7 @@ public class ExemplarDAO {
             stmt = conexao.prepareStatement("UPDATE `exemplar` SET `livro` = ?,`situacao` = ? WHERE `id` = ?");
             stmt.setInt(1, exemplar.getLivro().getId());
             stmt.setBoolean(2, exemplar.isSituacao());
-            stmt.setInt(3, exemplar.getLivro().getId());
+            stmt.setInt(3, exemplar.getId());
             stmt.executeUpdate();
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);

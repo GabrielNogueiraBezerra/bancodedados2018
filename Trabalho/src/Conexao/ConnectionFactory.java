@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class ConnectionFactory {
 
     private static ConnectionFactory instancia;
-    private final String DATABASE = "bancoFBD";
+    private final String DATABASE = "bancoBD";
     private final String HOST = "localhost";
     private final String DRIVE = "com.mysql.cj.jdbc.Driver";
     private final String URL = "jdbc:mysql://" + HOST

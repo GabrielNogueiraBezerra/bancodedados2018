@@ -50,12 +50,12 @@ public class LivroDAO {
         PreparedStatement stmt = null;
         try {
             stmt = conexao.prepareStatement("UPDATE `livro` SET `autor` = ?,`titulo` = ?,`resenha` = ?, `edicao` = ?, `categoria` = ? WHERE `id` = ?");
-            stmt.setString(2, livro.getAutor());
-            stmt.setString(3, livro.getTitulo());
-            stmt.setString(4, livro.getResenha());
-            stmt.setString(5, livro.getEdicao());
-            stmt.setString(6, livro.getCategoria());
-            stmt.setInt(7, livro.getId());
+            stmt.setString(1, livro.getAutor());
+            stmt.setString(2, livro.getTitulo());
+            stmt.setString(3, livro.getResenha());
+            stmt.setString(4, livro.getEdicao());
+            stmt.setString(5, livro.getCategoria());
+            stmt.setInt(6, livro.getId());
 
             stmt.executeUpdate();
         } finally {

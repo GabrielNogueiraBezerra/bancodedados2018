@@ -54,13 +54,14 @@ public class EmprestimoDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("UPDATE `emprestimo` SET `exemplar` = ?,`aluno` = ?,`datEmprestimo` = ?, `dataPrevista` = ?, `renovacoes` = ?, `funcionario` = ? WHERE `id` = ?");
-            stmt.setInt(2, emprestimo.getExemplar().getId());
-            stmt.setInt(3, emprestimo.getAluno().getId());
-            stmt.setDate(4, (Date) emprestimo.getDataEmprestimo());
-            stmt.setDate(5, (Date) emprestimo.getDataPrevista());
-            stmt.setInt(6, emprestimo.getRenovacoes());
-            stmt.setInt(7, emprestimo.getFuncionario().getId());
+            stmt = conexao.prepareStatement("UPDATE `emprestimo` SET `exemplar` = ?,`aluno` = ?,`dataEmprestimo` = ?, `dataPrevista` = ?, `renovacoes` = ?, `funcionario` = ? WHERE `id` = ?");
+            stmt.setInt(1, emprestimo.getExemplar().getId());
+            stmt.setInt(2, emprestimo.getAluno().getId());
+            stmt.setDate(3, (Date) emprestimo.getDataEmprestimo());
+            stmt.setDate(4, (Date) emprestimo.getDataPrevista());
+            stmt.setInt(5, emprestimo.getRenovacoes());
+            stmt.setInt(6, emprestimo.getFuncionario().getId());
+            stmt.setInt(7, emprestimo.getId());
             stmt.executeUpdate();
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
@@ -93,7 +94,7 @@ public class EmprestimoDAO {
                 aluno.buscar(result.getInt("aluno"));
                 emprestimo.setAluno(aluno);
                 
-                emprestimo.setDataEmprestimo(result.getDate("datEmprestimo"));
+                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
                 emprestimo.setDataPrevista(result.getDate("dataPrevista"));
                 emprestimo.setRenovacoes(result.getInt("renovacoes"));
                 

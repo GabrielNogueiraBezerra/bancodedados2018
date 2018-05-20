@@ -29,7 +29,7 @@ public class FuncionarioDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("INSERT INTO `devolucao`(`id`, `nome`, `contato`, `login`, `senha`) VALUES (?, ?, ?, ?, ?)");
+            stmt = conexao.prepareStatement("INSERT INTO `funcionario`(`id`, `nome`, `contato`, `login`, `senha`) VALUES (?, ?, ?, ?, ?)");
             stmt.setInt(1, funcionario.getId());
             stmt.setString(2, funcionario.getNome());
             stmt.setString(3, funcionario.getContato());

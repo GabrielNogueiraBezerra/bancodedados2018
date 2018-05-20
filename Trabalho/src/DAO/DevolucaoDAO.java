@@ -85,7 +85,7 @@ public class DevolucaoDAO {
             result = stmt.executeQuery();
 
             while (result.next()) {
-                devolucao.setData(result.getDate(""));
+                devolucao.setData(result.getDate("data"));
 
                 Emprestimo emprestimo = new Emprestimo();
                 emprestimo.buscar(result.getInt("emprestimo"));
@@ -95,7 +95,7 @@ public class DevolucaoDAO {
                 funcionario.buscar(result.getInt("emprestimo"));
                 devolucao.setFuncionario(funcionario);
                 
-                devolucao.setMulta(result.getFloat(""));
+                devolucao.setMulta(result.getFloat("multa"));
             }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt, result);
