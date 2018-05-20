@@ -1,8 +1,12 @@
 package Models;
 
+import DAO.ExemplarDAO;
+import java.sql.SQLException;
+
 /**
  *
  * @author Gabriel
+ * @modificado Williana
  */
 public class Exemplar implements InterfaceManter {
 
@@ -46,12 +50,11 @@ public class Exemplar implements InterfaceManter {
     public void setSituacao(boolean situacao) {
         this.situacao = situacao;
     }
-
     @Override
-    public void inserir() {
+    public void inserir() throws SQLException, ClassNotFoundException {
         if (this.livro != null) {
             if (this.id == 0) {
-                // inserir no banco de dados
+                ExemplarDAO.getInstancia().inserir(this);
             } else {
                 this.alterar();
             }
@@ -59,26 +62,26 @@ public class Exemplar implements InterfaceManter {
     }
 
     @Override
-    public void alterar() {
+    public void alterar()  throws SQLException, ClassNotFoundException{
         if (this.id > 0) {
-            // alterar no banco de dados
+        	ExemplarDAO.getInstancia().alterar(this);
         }
     }
 
     @Override
-    public void buscar(int codigo) {
+    public void buscar(int codigo) throws SQLException, ClassNotFoundException {
         if (codigo > 0) {
             this.id = codigo;
-
-            // buscar no banco de dados
+            ExemplarDAO.getInstancia().buscar(this);
         }
     }
 
     @Override
-    public void excluir() {
+    public void excluir() throws SQLException, ClassNotFoundException {
         if (this.id > 0) {
-            // excluir no banco de dados
+        	ExemplarDAO.getInstancia().excluir(this);
         }
     }
+
 
 }
