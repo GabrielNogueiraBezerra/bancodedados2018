@@ -1,8 +1,12 @@
 package Models;
 
+import DAO.AlunoDAO;
+import java.sql.SQLException;
+
 /**
  *
  * @author Gabriel
+ * @modificado Williana
  */
 public class Aluno implements InterfaceManter {
 
@@ -88,11 +92,12 @@ public class Aluno implements InterfaceManter {
         }
     }
 
+ 
     @Override
-    public void inserir() {
+    public void inserir() throws ClassNotFoundException, SQLException {
         if (this.contato != null && this.curso != null && this.email != null && this.nome != null) {
             if (this.id == 0) {
-                // salvar no banco de dados
+                AlunoDAO.getInstancia().inserir(this);
             } else {
                 this.alterar();
             }
@@ -100,26 +105,24 @@ public class Aluno implements InterfaceManter {
     }
 
     @Override
-    public void alterar() {
+    public void alterar() throws ClassNotFoundException, SQLException {
         if (this.id > 0) {
-            // alterar no banco de dados
+            AlunoDAO.getInstancia().alterar(this);
         }
     }
 
     @Override
-    public void buscar(int codigo) {
+    public void buscar(int codigo) throws ClassNotFoundException, SQLException{
         if (codigo > 0) {
             this.id = codigo;
-
-            // buscar no banco de dados
+           AlunoDAO.getInstancia().buscar(this);
         }
     }
 
     @Override
-    public void excluir() {
+    public void excluir() throws ClassNotFoundException, SQLException{
         if (this.id > 0) {
-            // deletar no banco de dados
+            AlunoDAO.getInstancia().excluir(this);
         }
     }
-
 }
