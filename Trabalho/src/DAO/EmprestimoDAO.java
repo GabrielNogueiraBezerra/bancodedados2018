@@ -93,7 +93,7 @@ public class EmprestimoDAO {
                 aluno.buscar(result.getInt("aluno"));
                 emprestimo.setAluno(aluno);
                 
-                emprestimo.setDataEmprestimo(result.getDate("datEmprestimo"));
+                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
                 emprestimo.setDataPrevista(result.getDate("dataPrevista"));
                 emprestimo.setRenovacoes(result.getInt("renovacoes"));
                 
