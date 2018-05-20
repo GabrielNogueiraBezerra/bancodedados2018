@@ -8,7 +8,13 @@ import java.util.ArrayList;
  */
 public class Configuracao implements InterfaceObservable {
 
-    private ArrayList<InterfaceObserver> observers = new ArrayList<InterfaceObserver>();
+    private ArrayList<InterfaceObserver> observers;
+
+    public Configuracao() {
+        if (this.observers != null) {
+            this.observers = new ArrayList<>();
+        }
+    }
 
     @Override
     public void incluir(InterfaceObserver observer) {

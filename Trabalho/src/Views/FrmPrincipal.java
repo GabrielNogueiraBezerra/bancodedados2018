@@ -1,8 +1,13 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Views;
 
 /**
  *
- * @author Gabriel
+ * @author gabri
  */
 public class FrmPrincipal extends javax.swing.JFrame {
 
@@ -22,21 +27,69 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        dekstop = new javax.swing.JDesktopPane();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jmCadastros = new javax.swing.JMenu();
+        jmiAluno = new javax.swing.JMenuItem();
+        jmiExemplar = new javax.swing.JMenuItem();
+        jmiFuncionario = new javax.swing.JMenuItem();
+        jmiLivro = new javax.swing.JMenuItem();
+        jmEmprestimo = new javax.swing.JMenu();
+        jmDevolucao = new javax.swing.JMenu();
+        jmSair = new javax.swing.JMenu();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sistema de Biblioteca");
+
+        javax.swing.GroupLayout dekstopLayout = new javax.swing.GroupLayout(dekstop);
+        dekstop.setLayout(dekstopLayout);
+        dekstopLayout.setHorizontalGroup(
+            dekstopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 763, Short.MAX_VALUE)
+        );
+        dekstopLayout.setVerticalGroup(
+            dekstopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 485, Short.MAX_VALUE)
+        );
+
+        jmCadastros.setText("Cadastros");
+
+        jmiAluno.setText("Aluno");
+        jmCadastros.add(jmiAluno);
+
+        jmiExemplar.setText("Exemplar");
+        jmCadastros.add(jmiExemplar);
+
+        jmiFuncionario.setText("Funcionário");
+        jmCadastros.add(jmiFuncionario);
+
+        jmiLivro.setText("Livro");
+        jmCadastros.add(jmiLivro);
+
+        jMenuBar1.add(jmCadastros);
+
+        jmEmprestimo.setText("Emprestimo");
+        jMenuBar1.add(jmEmprestimo);
+
+        jmDevolucao.setText("Devolução");
+        jMenuBar1.add(jmDevolucao);
+
+        jmSair.setText("Sair");
+        jMenuBar1.add(jmSair);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 584, Short.MAX_VALUE)
+            .addComponent(dekstop)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 404, Short.MAX_VALUE)
+            .addComponent(dekstop)
         );
 
-        pack();
+        setBounds(0, 0, 779, 545);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -75,5 +128,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDesktopPane dekstop;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jmCadastros;
+    private javax.swing.JMenu jmDevolucao;
+    private javax.swing.JMenu jmEmprestimo;
+    private javax.swing.JMenu jmSair;
+    private javax.swing.JMenuItem jmiAluno;
+    private javax.swing.JMenuItem jmiExemplar;
+    private javax.swing.JMenuItem jmiFuncionario;
+    private javax.swing.JMenuItem jmiLivro;
     // End of variables declaration//GEN-END:variables
 }
