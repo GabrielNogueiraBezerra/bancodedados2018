@@ -1,10 +1,13 @@
 package Models;
 
+import DAO.DevolucaoDAO;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
  *
  * @author Gabriel
+ * @modificado Williana
  */
 public class Devolucao implements InterfaceManter {
 
@@ -76,10 +79,10 @@ public class Devolucao implements InterfaceManter {
     }
 
     @Override
-    public void inserir() {
+    public void inserir() throws ClassNotFoundException, SQLException {
         if (this.data != null && this.emprestimo != null && this.funcionario != null) {
             if (this.id == 0) {
-                // inserir no banco de dados
+                DevolucaoDAO.getInstancia().inserir(this);
             } else {
                 this.alterar();
             }
@@ -87,25 +90,24 @@ public class Devolucao implements InterfaceManter {
     }
 
     @Override
-    public void alterar() {
+    public void alterar() throws ClassNotFoundException, SQLException  {
         if (this.id > 0) {
-            // alterar no banco de dados
+            DevolucaoDAO.getInstancia().alterar(this);
         }
     }
 
     @Override
-    public void buscar(int codigo) {
+    public void buscar(int codigo) throws ClassNotFoundException, SQLException  {
         if (codigo > 0) {
             this.id = codigo;
-
-            // buscar no banco de dados
+           DevolucaoDAO.getInstancia().buscar(this);  		
         }
     }
 
     @Override
-    public void excluir() {
+    public void excluir()  throws ClassNotFoundException, SQLException {
         if (this.id > 0) {
-            // excluir no banoc de dados
+            DevolucaoDAO.getInstancia().excluir(this);
         }
     }
 
