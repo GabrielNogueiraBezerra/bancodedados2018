@@ -1,8 +1,12 @@
 package Models;
 
+import DAO.LivroDAO;
+import java.sql.SQLException;
+
 /**
  *
  * @author Gabriel
+ * @modificado Williana
  */
 public class Livro implements InterfaceManter {
 
@@ -73,11 +77,12 @@ public class Livro implements InterfaceManter {
         this.categoria = categoria;
     }
 
+   
     @Override
-    public void inserir() {
+    public void inserir()  throws ClassNotFoundException, SQLException{
         if (this.autor != null && this.categoria != null && this.edicao != null && this.resenha != null && this.titulo != null) {
             if (this.id == 0) {
-                // inserir no banco de dados;
+                LivroDAO.getInstancia().inserir(this);
             } else {
                 this.alterar();
             }
@@ -85,25 +90,24 @@ public class Livro implements InterfaceManter {
     }
 
     @Override
-    public void alterar() {
+    public void alterar()  throws ClassNotFoundException, SQLException{
         if (this.id > 0) {
-            // alterar no banco de dados
+           LivroDAO.getInstancia().alterar(this);
         }
     }
 
     @Override
-    public void buscar(int codigo) {
+    public void buscar(int codigo) throws ClassNotFoundException, SQLException {
         if (codigo > 0) {
             this.id = codigo;
-
-            // buscar no banco de dados;
+            LivroDAO.getInstancia().buscar(this);
         }
     }
 
     @Override
-    public void excluir() {
+    public void excluir() throws ClassNotFoundException, SQLException {
         if (this.id > 0) {
-            // excluir no banco de dados
+            LivroDAO.getInstancia().excluir(this);
         }
     }
 
