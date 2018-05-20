@@ -1,10 +1,13 @@
 package Models;
 
+import DAO.EmprestimoDAO;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
  *
  * @author Gabriel
+ * @modificado Williana
  */
 public class Emprestimo implements InterfaceManter {
 
@@ -28,12 +31,13 @@ public class Emprestimo implements InterfaceManter {
         this.setRenovacoes(renovacoes);
     }
 
+ 
     @Override
-    public void inserir() {
+    public void inserir() throws ClassNotFoundException, SQLException{
         if (this.aluno != null && this.dataEmprestimo != null && this.dataPrevista != null && this.exemplar != null && this.funcionario != null
                 && this.renovacoes >= 0) {
             if (this.id == 0) {
-                // inserir no banco de dados
+                EmprestimoDAO.getInstancia().inserir(this);
             } else {
                 this.alterar();
             }
@@ -41,27 +45,27 @@ public class Emprestimo implements InterfaceManter {
     }
 
     @Override
-    public void alterar() {
+    public void alterar()  throws ClassNotFoundException, SQLException{
         if(this.id > 0){
-            // alterar no banco de dados
+            EmprestimoDAO.getInstancia().alterar(this);
         }
     }
 
     @Override
-    public void buscar(int codigo) {
+    public void buscar(int codigo)  throws ClassNotFoundException, SQLException{
         if(codigo > 0){
             this.id = codigo;
-            
-            // buscar no banco de dados
+            EmprestimoDAO.getInstancia().buscar(this);
         }
     }
 
     @Override
-    public void excluir() {
+    public void excluir() throws ClassNotFoundException, SQLException {
         if(this.id > 0){
-            // excluir no banco de dados
+            EmprestimoDAO.getInstancia().excluir(this);
         }
     }
+
 
     public int getId() {
         return id;
