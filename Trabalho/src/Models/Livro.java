@@ -77,9 +77,8 @@ public class Livro implements InterfaceManter {
         this.categoria = categoria;
     }
 
-   
     @Override
-    public void inserir()  throws ClassNotFoundException, SQLException{
+    public void inserir() throws ClassNotFoundException, SQLException {
         if (this.autor != null && this.categoria != null && this.edicao != null && this.resenha != null && this.titulo != null) {
             if (this.id == 0) {
                 LivroDAO.getInstancia().inserir(this);
@@ -90,9 +89,9 @@ public class Livro implements InterfaceManter {
     }
 
     @Override
-    public void alterar()  throws ClassNotFoundException, SQLException{
+    public void alterar() throws ClassNotFoundException, SQLException {
         if (this.id > 0) {
-           LivroDAO.getInstancia().alterar(this);
+            LivroDAO.getInstancia().alterar(this);
         }
     }
 

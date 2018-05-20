@@ -31,9 +31,8 @@ public class Emprestimo implements InterfaceManter {
         this.setRenovacoes(renovacoes);
     }
 
- 
     @Override
-    public void inserir() throws ClassNotFoundException, SQLException{
+    public void inserir() throws ClassNotFoundException, SQLException {
         if (this.aluno != null && this.dataEmprestimo != null && this.dataPrevista != null && this.exemplar != null && this.funcionario != null
                 && this.renovacoes >= 0) {
             if (this.id == 0) {
@@ -45,15 +44,15 @@ public class Emprestimo implements InterfaceManter {
     }
 
     @Override
-    public void alterar()  throws ClassNotFoundException, SQLException{
-        if(this.id > 0){
+    public void alterar() throws ClassNotFoundException, SQLException {
+        if (this.id > 0) {
             EmprestimoDAO.getInstancia().alterar(this);
         }
     }
 
     @Override
-    public void buscar(int codigo)  throws ClassNotFoundException, SQLException{
-        if(codigo > 0){
+    public void buscar(int codigo) throws ClassNotFoundException, SQLException {
+        if (codigo > 0) {
             this.id = codigo;
             EmprestimoDAO.getInstancia().buscar(this);
         }
@@ -61,11 +60,10 @@ public class Emprestimo implements InterfaceManter {
 
     @Override
     public void excluir() throws ClassNotFoundException, SQLException {
-        if(this.id > 0){
+        if (this.id > 0) {
             EmprestimoDAO.getInstancia().excluir(this);
         }
     }
-
 
     public int getId() {
         return id;

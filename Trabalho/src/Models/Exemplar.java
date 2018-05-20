@@ -50,6 +50,7 @@ public class Exemplar implements InterfaceManter {
     public void setSituacao(boolean situacao) {
         this.situacao = situacao;
     }
+
     @Override
     public void inserir() throws SQLException, ClassNotFoundException {
         if (this.livro != null) {
@@ -62,9 +63,9 @@ public class Exemplar implements InterfaceManter {
     }
 
     @Override
-    public void alterar()  throws SQLException, ClassNotFoundException{
+    public void alterar() throws SQLException, ClassNotFoundException {
         if (this.id > 0) {
-        	ExemplarDAO.getInstancia().alterar(this);
+            ExemplarDAO.getInstancia().alterar(this);
         }
     }
 
@@ -79,9 +80,8 @@ public class Exemplar implements InterfaceManter {
     @Override
     public void excluir() throws SQLException, ClassNotFoundException {
         if (this.id > 0) {
-        	ExemplarDAO.getInstancia().excluir(this);
+            ExemplarDAO.getInstancia().excluir(this);
         }
     }
-
 
 }

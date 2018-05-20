@@ -77,9 +77,8 @@ public class Funcionario implements InterfaceManter {
         }
     }
 
- 
     @Override
-    public void inserir()  throws ClassNotFoundException, SQLException{
+    public void inserir() throws ClassNotFoundException, SQLException {
         if (this.contato != null && this.login != null && this.nome != null && this.senha != null) {
             if (this.id == 0) {
                 FuncionarioDAO.getInstancia().inserir(this);
@@ -90,27 +89,26 @@ public class Funcionario implements InterfaceManter {
     }
 
     @Override
-    public void alterar()  throws ClassNotFoundException, SQLException{
+    public void alterar() throws ClassNotFoundException, SQLException {
         if (this.id > 0) {
-        	FuncionarioDAO.getInstancia().alterar(this);
+            FuncionarioDAO.getInstancia().alterar(this);
         }
     }
 
     @Override
-    public void buscar(int codigo)  throws ClassNotFoundException, SQLException{
+    public void buscar(int codigo) throws ClassNotFoundException, SQLException {
         if (codigo > 0) {
             this.id = codigo;
             FuncionarioDAO.getInstancia().buscar(this);
         }
-       
+
     }
 
     @Override
-    public void excluir()  throws ClassNotFoundException, SQLException{
+    public void excluir() throws ClassNotFoundException, SQLException {
         if (this.id > 0) {
-           FuncionarioDAO.getInstancia().excluir(this);
+            FuncionarioDAO.getInstancia().excluir(this);
         }
     }
-
 
 }

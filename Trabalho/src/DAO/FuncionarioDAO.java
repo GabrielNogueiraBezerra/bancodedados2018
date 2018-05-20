@@ -12,23 +12,19 @@ import Models.Funcionario;
  *
  * @author Williana
  */
-
-
-
 public class FuncionarioDAO {
-
 
     private ConnectionFactory dao = ConnectionFactory.getInstancia();
     private static FuncionarioDAO instancia;
-    
+
     public static FuncionarioDAO getInstancia() {
         if (instancia == null) {
             instancia = new FuncionarioDAO();
         }
-        
+
         return instancia;
     }
-    
+
     public void inserir(Funcionario funcionario) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -39,15 +35,15 @@ public class FuncionarioDAO {
             stmt.setString(3, funcionario.getContato());
             stmt.setString(4, funcionario.getLogin());
             stmt.setString(5, funcionario.getSenha());
-              
+
             stmt.executeUpdate();
-            
+
             funcionario.setId(this.find());
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
+
     public void alterar(Funcionario funcionario) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -63,7 +59,7 @@ public class FuncionarioDAO {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
+
     public void excluir(Funcionario funcionario) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -75,40 +71,45 @@ public class FuncionarioDAO {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
-    public Funcionario buscar(Funcionario funcionario) throws SQLException, ClassNotFoundException {
+
+    public void buscar(Funcionario funcionario) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
             stmt = conexao.prepareStatement("SELECT `nome`, `contato`, `login`, `senha` FROM `funcionario` WHERE `id` = ?");
             stmt.setInt(1, funcionario.getId());
-            stmt.executeQuery();
-            return (Funcionario) stmt;
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                funcionario.setContato(result.getString("contato"));
+                funcionario.setLogin(result.getString("login"));
+                funcionario.setNome(result.getString("nome"));
+                funcionario.setSenha(result.getString("senha"));
+            }
         } finally {
-            ConnectionFactory.closeConnection(conexao, stmt);
+            ConnectionFactory.closeConnection(conexao, stmt, result);
         }
     }
-    
+
     private int find() throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
         int resultado = 0;
-        
+
         try {
             stmt = conexao.prepareStatement("SELECT AUTO_INCREMENT as id FROM information_schema.tables WHERE table_name = 'funcionario' AND table_schema = 'bancoBD'");
             result = stmt.executeQuery();
-            
+
             while (result.next()) {
                 resultado = result.getInt("id");
             }
-            
+
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
             return resultado - 1;
         }
     }
 
-	
 }

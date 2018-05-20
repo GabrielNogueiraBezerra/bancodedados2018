@@ -20,8 +20,8 @@ public class Aluno implements InterfaceManter {
     public Aluno() {
         super();
     }
-    
-    public Aluno(String nome){
+
+    public Aluno(String nome) {
         this();
         this.setNome(nome);
     }
@@ -92,7 +92,6 @@ public class Aluno implements InterfaceManter {
         }
     }
 
- 
     @Override
     public void inserir() throws ClassNotFoundException, SQLException {
         if (this.contato != null && this.curso != null && this.email != null && this.nome != null) {
@@ -112,15 +111,15 @@ public class Aluno implements InterfaceManter {
     }
 
     @Override
-    public void buscar(int codigo) throws ClassNotFoundException, SQLException{
+    public void buscar(int codigo) throws ClassNotFoundException, SQLException {
         if (codigo > 0) {
             this.id = codigo;
-           AlunoDAO.getInstancia().buscar(this);
+            AlunoDAO.getInstancia().buscar(this);
         }
     }
 
     @Override
-    public void excluir() throws ClassNotFoundException, SQLException{
+    public void excluir() throws ClassNotFoundException, SQLException {
         if (this.id > 0) {
             AlunoDAO.getInstancia().excluir(this);
         }

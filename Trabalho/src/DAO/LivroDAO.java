@@ -12,23 +12,19 @@ import Models.Livro;
  *
  * @author Williana
  */
-
-
 public class LivroDAO {
-
-	
 
     private ConnectionFactory dao = ConnectionFactory.getInstancia();
     private static LivroDAO instancia;
-    
+
     public static LivroDAO getInstancia() {
         if (instancia == null) {
             instancia = new LivroDAO();
         }
-        
+
         return instancia;
     }
-    
+
     public void inserir(Livro livro) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -40,15 +36,15 @@ public class LivroDAO {
             stmt.setString(4, livro.getResenha());
             stmt.setString(5, livro.getEdicao());
             stmt.setString(6, livro.getCategoria());
-             
+
             stmt.executeUpdate();
-            
+
             livro.setId(this.find());
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
+
     public void alterar(Livro livro) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -60,14 +56,13 @@ public class LivroDAO {
             stmt.setString(5, livro.getEdicao());
             stmt.setString(6, livro.getCategoria());
             stmt.setInt(7, livro.getId());
-            
-            
+
             stmt.executeUpdate();
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
+
     public void excluir(Livro livro) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -79,41 +74,46 @@ public class LivroDAO {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
-    public Livro buscar(Livro livro) throws SQLException, ClassNotFoundException {
+
+    public void buscar(Livro livro) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
             stmt = conexao.prepareStatement("SELECT `autor`, `titulo`, `resenha`, `edicao`, `categoria` FROM `livro` WHERE `id` = ?");
             stmt.setInt(1, livro.getId());
-            stmt.executeQuery();
-            return (Livro) stmt;
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                livro.setAutor(result.getString("autor"));
+                livro.setCategoria(result.getString("categoria"));
+                livro.setEdicao(result.getString("edicao"));
+                livro.setResenha(result.getString("resenha"));
+                livro.setTitulo(result.getString("titulo"));
+            }
         } finally {
-            ConnectionFactory.closeConnection(conexao, stmt);
+            ConnectionFactory.closeConnection(conexao, stmt, result);
         }
     }
-    
+
     private int find() throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
         int resultado = 0;
-        
+
         try {
             stmt = conexao.prepareStatement("SELECT AUTO_INCREMENT as id FROM information_schema.tables WHERE table_name = 'livro' AND table_schema = 'bancoBD'");
             result = stmt.executeQuery();
-            
+
             while (result.next()) {
                 resultado = result.getInt("id");
             }
-            
+
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
             return resultado - 1;
         }
     }
 
-	
-	
 }

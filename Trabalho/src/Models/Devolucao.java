@@ -90,22 +90,22 @@ public class Devolucao implements InterfaceManter {
     }
 
     @Override
-    public void alterar() throws ClassNotFoundException, SQLException  {
+    public void alterar() throws ClassNotFoundException, SQLException {
         if (this.id > 0) {
             DevolucaoDAO.getInstancia().alterar(this);
         }
     }
 
     @Override
-    public void buscar(int codigo) throws ClassNotFoundException, SQLException  {
+    public void buscar(int codigo) throws ClassNotFoundException, SQLException {
         if (codigo > 0) {
             this.id = codigo;
-           DevolucaoDAO.getInstancia().buscar(this);  		
+            DevolucaoDAO.getInstancia().buscar(this);
         }
     }
 
     @Override
-    public void excluir()  throws ClassNotFoundException, SQLException {
+    public void excluir() throws ClassNotFoundException, SQLException {
         if (this.id > 0) {
             DevolucaoDAO.getInstancia().excluir(this);
         }
