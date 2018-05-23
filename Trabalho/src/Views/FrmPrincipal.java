@@ -31,7 +31,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jmCadastros = new javax.swing.JMenu();
         jmiAluno = new javax.swing.JMenuItem();
-        jmiExemplar = new javax.swing.JMenuItem();
         jmiFuncionario = new javax.swing.JMenuItem();
         jmiLivro = new javax.swing.JMenuItem();
         jmEmprestimo = new javax.swing.JMenu();
@@ -52,12 +51,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         );
 
         jmCadastros.setText("Cadastros");
+        jmCadastros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmCadastrosActionPerformed(evt);
+            }
+        });
 
         jmiAluno.setText("Aluno");
         jmCadastros.add(jmiAluno);
-
-        jmiExemplar.setText("Exemplar");
-        jmCadastros.add(jmiExemplar);
 
         jmiFuncionario.setText("Funcionário");
         jmCadastros.add(jmiFuncionario);
@@ -91,6 +92,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         setBounds(0, 0, 779, 545);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jmCadastrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCadastrosActionPerformed
+        FrmCadastrarAluno frmCadastrarAluno = new FrmCadastrarAluno();
+    }//GEN-LAST:event_jmCadastrosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -135,7 +140,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jmEmprestimo;
     private javax.swing.JMenu jmSair;
     private javax.swing.JMenuItem jmiAluno;
-    private javax.swing.JMenuItem jmiExemplar;
     private javax.swing.JMenuItem jmiFuncionario;
     private javax.swing.JMenuItem jmiLivro;
     // End of variables declaration//GEN-END:variables
