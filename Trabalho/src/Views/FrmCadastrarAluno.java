@@ -57,16 +57,34 @@ public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
 
         tableAlunos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Matricula", "Nome", "Email", "Situação"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tableAlunos);
+        if (tableAlunos.getColumnModel().getColumnCount() > 0) {
+            tableAlunos.getColumnModel().getColumn(0).setResizable(false);
+            tableAlunos.getColumnModel().getColumn(1).setResizable(false);
+            tableAlunos.getColumnModel().getColumn(2).setResizable(false);
+            tableAlunos.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jLabel2.setText("Matricula:");
 
