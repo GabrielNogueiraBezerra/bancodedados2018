@@ -12,8 +12,6 @@ import java.util.logging.Logger;
  *
  * @author Gabriel
  */
-
-
 public class ConnectionFactory {
 
     private static ConnectionFactory instancia;

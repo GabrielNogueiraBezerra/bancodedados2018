@@ -6,24 +6,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import Models.*;
+import java.util.ArrayList;
 
 /**
  *
  * @author Williana
  */
 public class AlunoDAO {
-
+    
     private ConnectionFactory dao = ConnectionFactory.getInstancia();
     private static AlunoDAO instancia;
-
+    
     public static AlunoDAO getInstancia() {
         if (instancia == null) {
             instancia = new AlunoDAO();
         }
-
+        
         return instancia;
     }
-
+    
     public void inserir(Aluno aluno) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -35,15 +36,15 @@ public class AlunoDAO {
             stmt.setString(4, aluno.getContato());
             stmt.setBoolean(5, aluno.isSituacao());
             stmt.setString(6, aluno.getEmail());
-
+            
             stmt.executeUpdate();
-
+            
             aluno.setId(this.find());
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-
+    
     public void alterar(Aluno aluno) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -60,7 +61,7 @@ public class AlunoDAO {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-
+    
     public void excluir(Aluno aluno) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -72,7 +73,7 @@ public class AlunoDAO {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-
+    
     public void buscar(Aluno aluno) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -81,7 +82,7 @@ public class AlunoDAO {
             stmt = conexao.prepareStatement("SELECT `nome`, `curso`, `contato`, `situacao`, `email` FROM `aluno` WHERE `id` = ?");
             stmt.setInt(1, aluno.getId());
             result = stmt.executeQuery();
-
+            
             while (result.next()) {
                 aluno.setContato(result.getString("contato"));
                 aluno.setCurso(result.getString("curso"));
@@ -93,25 +94,51 @@ public class AlunoDAO {
             ConnectionFactory.closeConnection(conexao, stmt, result);
         }
     }
-
+    
+    public ArrayList<Aluno> buscaTodos() throws SQLException, ClassNotFoundException {
+        
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        ArrayList<Aluno> alunos = new ArrayList<Aluno>();
+        try {
+            stmt = conexao.prepareStatement("SELECT `id`, `nome`, `curso`, `contato`, `situacao`, `email` FROM `aluno` order by id");
+            result = stmt.executeQuery();
+            
+            while (result.next()) {
+                Aluno aluno = new Aluno();
+                aluno.setId(result.getInt("id"));
+                aluno.setContato(result.getString("contato"));
+                aluno.setCurso(result.getString("curso"));
+                aluno.setEmail(result.getString("email"));
+                aluno.setNome(result.getString("nome"));
+                aluno.setSituacao(result.getBoolean("situacao"));
+                alunos.add(aluno);
+            }
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt, result);
+            return alunos;
+        }
+    }
+    
     private int find() throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
         int resultado = 0;
-
+        
         try {
             stmt = conexao.prepareStatement("SELECT AUTO_INCREMENT as id FROM information_schema.tables WHERE table_name = 'aluno' AND table_schema = 'bancoBD'");
             result = stmt.executeQuery();
-
+            
             while (result.next()) {
                 resultado = result.getInt("id");
             }
-
+            
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
             return resultado - 1;
         }
     }
-
+    
 }

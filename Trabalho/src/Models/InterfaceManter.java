@@ -1,6 +1,7 @@
 package Models;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,5 +17,4 @@ public interface InterfaceManter {
     public void buscar(int codigo) throws ClassNotFoundException, SQLException;
 
     public void excluir() throws ClassNotFoundException, SQLException;
-
 }

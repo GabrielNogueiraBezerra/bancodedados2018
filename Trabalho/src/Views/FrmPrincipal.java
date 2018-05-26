@@ -1,21 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Views;
+
+import Models.Configuracao;
 
 /**
  *
- * @author gabri
+ * @author Gabriel
  */
 public class FrmPrincipal extends javax.swing.JFrame {
+
+    private static Configuracao model;
 
     /**
      * Creates new form FrmPrincipal
      */
     public FrmPrincipal() {
         initComponents();
+    }
+
+    public FrmPrincipal(Configuracao model) {
+        this();
+        this.model = model;
+        this.iniciaFormulario();
     }
 
     /**
@@ -38,6 +43,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema de Biblioteca");
 
         javax.swing.GroupLayout dekstopLayout = new javax.swing.GroupLayout(dekstop);
         dekstop.setLayout(dekstopLayout);
@@ -58,6 +64,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
 
         jmiAluno.setText("Aluno");
+        jmiAluno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiAlunoActionPerformed(evt);
+            }
+        });
         jmCadastros.add(jmiAluno);
 
         jmiFuncionario.setText("Funcionário");
@@ -94,43 +105,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jmCadastrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCadastrosActionPerformed
-        FrmCadastrarAluno frmCadastrarAluno = new FrmCadastrarAluno();
+
     }//GEN-LAST:event_jmCadastrosActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmPrincipal().setVisible(true);
-            }
-        });
-    }
+    private void jmiAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAlunoActionPerformed
+        FrmCadastrarAluno frmCadastrarAluno = new FrmCadastrarAluno(this.model);
+        this.dekstop.add(frmCadastrarAluno);
+        frmCadastrarAluno.setVisible(true);
+    }//GEN-LAST:event_jmiAlunoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane dekstop;
@@ -143,4 +125,31 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiFuncionario;
     private javax.swing.JMenuItem jmiLivro;
     // End of variables declaration//GEN-END:variables
+
+    public void iniciaFormulario() {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(FrmPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new FrmPrincipal().setVisible(true);
+            }
+        });
+    }
+
 }
