@@ -1,13 +1,15 @@
 package Views;
 
 import Models.Configuracao;
+import java.awt.Dimension;
+import javax.swing.JInternalFrame;
 
 /**
  *
  * @author Gabriel
  */
 public class FrmPrincipal extends javax.swing.JFrame {
-
+    
     private static Configuracao model;
 
     /**
@@ -15,12 +17,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
      */
     public FrmPrincipal() {
         initComponents();
+        this.setExtendedState(FrmPrincipal.MAXIMIZED_BOTH);
     }
-
+    
     public FrmPrincipal(Configuracao model) {
         this();
         this.model = model;
         this.iniciaFormulario();
+    }
+    
+    private void colocarFormularioCentro(JInternalFrame frame) {
+        Dimension desktopSize = this.getSize();
+        Dimension jInternalFrameSize = frame.getSize();
+        frame.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                (desktopSize.height - jInternalFrameSize.height) / 2);
     }
 
     /**
@@ -33,7 +43,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         dekstop = new javax.swing.JDesktopPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        menu = new javax.swing.JMenuBar();
         jmCadastros = new javax.swing.JMenu();
         jmiAluno = new javax.swing.JMenuItem();
         jmiFuncionario = new javax.swing.JMenuItem();
@@ -44,6 +54,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Biblioteca");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         javax.swing.GroupLayout dekstopLayout = new javax.swing.GroupLayout(dekstop);
         dekstop.setLayout(dekstopLayout);
@@ -77,46 +92,77 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmiLivro.setText("Livro");
         jmCadastros.add(jmiLivro);
 
-        jMenuBar1.add(jmCadastros);
+        menu.add(jmCadastros);
 
         jmEmprestimo.setText("Emprestimo");
-        jMenuBar1.add(jmEmprestimo);
+        menu.add(jmEmprestimo);
 
         jmDevolucao.setText("Devolução");
-        jMenuBar1.add(jmDevolucao);
+        menu.add(jmDevolucao);
 
         jmSair.setText("Sair");
-        jMenuBar1.add(jmSair);
+        jmSair.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
+            public void menuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
+                jmSairMenuKeyPressed(evt);
+            }
+            public void menuKeyReleased(javax.swing.event.MenuKeyEvent evt) {
+            }
+            public void menuKeyTyped(javax.swing.event.MenuKeyEvent evt) {
+            }
+        });
+        jmSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmSairActionPerformed(evt);
+            }
+        });
+        menu.add(jmSair);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dekstop)
+            .addComponent(dekstop, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dekstop)
+            .addComponent(dekstop, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         setBounds(0, 0, 779, 545);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jmCadastrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCadastrosActionPerformed
-
     }//GEN-LAST:event_jmCadastrosActionPerformed
 
     private void jmiAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAlunoActionPerformed
+        this.dekstop.removeAll();
         FrmCadastrarAluno frmCadastrarAluno = new FrmCadastrarAluno(this.model);
         this.dekstop.add(frmCadastrarAluno);
+        this.colocarFormularioCentro(frmCadastrarAluno);
         frmCadastrarAluno.setVisible(true);
     }//GEN-LAST:event_jmiAlunoActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        if (this.model.getFuncionario() == null) {
+            FrmLogin frmLogin = new FrmLogin();
+            this.dekstop.add(frmLogin);
+            this.colocarFormularioCentro(frmLogin);
+            frmLogin.setVisible(true);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmSairActionPerformed
+       
+    }//GEN-LAST:event_jmSairActionPerformed
+
+    private void jmSairMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_jmSairMenuKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jmSairMenuKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane dekstop;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jmCadastros;
     private javax.swing.JMenu jmDevolucao;
     private javax.swing.JMenu jmEmprestimo;
@@ -124,6 +170,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiAluno;
     private javax.swing.JMenuItem jmiFuncionario;
     private javax.swing.JMenuItem jmiLivro;
+    private javax.swing.JMenuBar menu;
     // End of variables declaration//GEN-END:variables
 
     public void iniciaFormulario() {
@@ -151,5 +198,5 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
     }
-
+    
 }

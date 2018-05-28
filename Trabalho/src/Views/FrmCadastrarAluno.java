@@ -6,6 +6,7 @@
 package Views;
 
 import Controllers.CadastrarAlunoController;
+import Models.Aluno;
 import Models.Configuracao;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -16,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Gabriel
  */
 public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
-
+    
     private Configuracao model;
     private CadastrarAlunoController controller;
 
@@ -26,81 +27,132 @@ public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
     public FrmCadastrarAluno() {
         initComponents();
     }
-
+    
     public FrmCadastrarAluno(Configuracao model) {
         this();
         this.model = model;
         this.controller = new CadastrarAlunoController(this, model);
     }
-
+    
     public boolean validaCampos() {
         if (this.txtNome.getText().equals("")) {
             this.mostraMensagem("Informe o nome do aluno.");
             this.txtNome.requestFocus();
             return false;
         }
-
+        
         if (this.txtCurso.getText().equals("")) {
             this.mostraMensagem("Informe o curso do aluno.");
             this.txtCurso.requestFocus();
             return false;
         }
-
+        
         if (this.txtContato.getText().equals("")) {
             this.mostraMensagem("Informe o contato do aluno.");
             this.txtContato.requestFocus();
             return false;
         }
-
+        
         if (this.txtEmail.getText().equals("")) {
             this.mostraMensagem("Informe o email do aluno.");
             this.txtEmail.requestFocus();
             return false;
         }
-
+        
         return true;
     }
-
+    
     public void limpaCampos() {
         this.txtNome.setText("");
         this.txtCurso.setText("");
         this.txtContato.setText("");
         this.txtEmail.setText("");
+        this.txtMatricula.setText("");
+        
+        this.btnSalvar.setText("Salvar");
+        this.btnExcluir.setEnabled(false);
     }
-
+    
     public void mostraMensagem(String mensagem) {
         if (mensagem != null) {
             JOptionPane.showMessageDialog(this, mensagem);
         }
     }
-
+    
+    public String getMatricula() {
+        return this.txtMatricula.getText();
+    }
+    
+    public void setMatricula(String matricula) {
+        if (matricula != null) {
+            this.txtMatricula.setText(matricula);
+        }
+    }
+    
     public String getNome() {
         return this.txtNome.getText();
     }
-
+    
+    public void setNome(String nome) {
+        if (nome != null) {
+            this.txtNome.setText(nome);
+        }
+    }
+    
     public String getCurso() {
         return this.txtCurso.getText();
     }
-
+    
+    public void setCurso(String curso) {
+        if (curso != null) {
+            this.txtCurso.setText(curso);
+        }
+    }
+    
     public String getContato() {
         return this.txtContato.getText();
     }
-
+    
+    public void setContato(String contato) {
+        if (contato != null) {
+            this.txtContato.setText(contato);
+        }
+    }
+    
     public String getEmail() {
         return this.txtEmail.getText();
     }
-
+    
+    public void setEmail(String email) {
+        if (email != null) {
+            this.txtEmail.setText(email);
+        }
+    }
+    
     public String getPesquisa() {
         return this.txtPesquisa.getText();
     }
-
+    
     public JTable getTableAlunos() {
         return this.tableAlunos;
     }
-
+    
     public void limpaTableAlunos() {
         DefaultTableModel tabela = (DefaultTableModel) this.tableAlunos.getModel();
         tabela.setNumRows(0);
+    }
+    
+    public void preencheCamposAlteracao(Aluno aluno) {
+        if (aluno != null) {
+            this.setNome(aluno.getNome());
+            this.setCurso(aluno.getCurso());
+            this.setEmail(aluno.getEmail());
+            this.setMatricula(String.valueOf(aluno.getId()));
+            this.setContato(aluno.getContato());
+            
+            this.btnSalvar.setText("Alterar");
+            this.btnExcluir.setEnabled(true);
+        }
     }
 
     /**
@@ -130,10 +182,28 @@ public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
         txtEmail = new javax.swing.JTextField();
         btnSalvar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Gerenciamento de aluno");
         setInheritsPopupMenu(true);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosed(evt);
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jLabel1.setText("Pesquisar");
 
@@ -178,7 +248,11 @@ public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tableAlunos.setRowSelectionAllowed(false);
+        tableAlunos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableAlunosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableAlunos);
         if (tableAlunos.getColumnModel().getColumnCount() > 0) {
             tableAlunos.getColumnModel().getColumn(0).setResizable(false);
@@ -213,53 +287,57 @@ public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
             }
         });
 
+        btnExcluir.setText("Excluir");
+        btnExcluir.setEnabled(false);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(48, 48, 48)
+                                .addComponent(jLabel3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(22, 22, 22)
+                                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(145, 145, 145)
+                                .addComponent(jLabel5))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtContato, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel6)
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel2)
-                .addGap(48, 48, 48)
-                .addComponent(jLabel3))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22)
-                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel4)
-                .addGap(145, 145, 145)
-                .addComponent(jLabel5))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(txtCurso, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtContato, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel6))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(105, 105, 105)
-                .addComponent(btnSalvar)
-                .addGap(76, 76, 76)
-                .addComponent(btnCancelar))
+                .addGap(89, 89, 89)
+                .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExcluir)
+                .addGap(106, 106, 106))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,9 +350,9 @@ public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
                         .addGap(1, 1, 1)
                         .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnOk))
-                .addGap(6, 6, 6)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -296,18 +374,21 @@ public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
                 .addComponent(jLabel6)
                 .addGap(6, 6, 6)
                 .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
-                    .addComponent(btnSalvar))
-                .addContainerGap(40, Short.MAX_VALUE))
+                    .addComponent(btnSalvar)
+                    .addComponent(btnExcluir))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnCancelar, btnSalvar});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        this.controller.evento(evt);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
@@ -326,9 +407,22 @@ public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
         this.controller.evento(evt);
     }//GEN-LAST:event_txtPesquisaKeyTyped
 
+    private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
+        this.controller.evento(evt);
+    }//GEN-LAST:event_formInternalFrameClosed
+
+    private void tableAlunosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableAlunosMouseClicked
+        this.controller.evento(evt);
+    }//GEN-LAST:event_tableAlunosMouseClicked
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        this.controller.evento(evt);
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel jLabel1;

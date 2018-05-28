@@ -10,6 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.InternalFrameEvent;
+import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,6 +45,25 @@ public class CadastrarAlunoController implements InterfaceObserver {
         }
     }
 
+    public void evento(InternalFrameEvent evt) {
+        this.model.excluir(this);
+    }
+
+    public void evento(MouseEvent evt) {
+        if (evt.getClickCount() > 1) {
+            int linha = this.view.getTableAlunos().getSelectedRow();
+            if (linha >= 0) {
+                try {
+                    this.view.preencheCamposAlteracao(this.model.retornaAluno(Integer.parseInt(
+                            this.view.getTableAlunos().getValueAt(linha, 0).toString())));
+
+                } catch (ClassNotFoundException | SQLException ex) {
+                    this.view.mostraMensagem("Não foi possível selecionar aluno. Mensagem retornada: " + ex.getMessage());
+                }
+            }
+        }
+    }
+
     private void eventoBotao(ActionEvent evt) {
         if (((JButton) evt.getSource()).getText().equals("Salvar")) {
             if (this.view.validaCampos()) {
@@ -52,6 +75,34 @@ public class CadastrarAlunoController implements InterfaceObserver {
                     this.view.mostraMensagem("Não foi possível inserir o aluno. Mensagem retornada: " + ex.getMessage());
                 }
             }
+        }
+
+        if (((JButton) evt.getSource()).getText().equals("Alterar")) {
+            if (this.view.validaCampos()) {
+                try {
+                    this.model.alterarAluno(Integer.parseInt(this.view.getMatricula()), this.view.getNome(), this.view.getCurso(), this.view.getContato(), this.view.getEmail());
+                    this.view.mostraMensagem("Aluno alterado com sucesso.");
+                    this.view.limpaCampos();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    this.view.mostraMensagem("Não foi possível inserir o aluno. Mensagem retornada: " + ex.getMessage());
+                }
+            }
+        }
+
+        if (((JButton) evt.getSource()).getText().equals("Excluir")) {
+            if (!this.view.getMatricula().equals("")) {
+                try {
+                    this.model.excluirAluno(Integer.parseInt(this.view.getMatricula()));
+                    this.view.mostraMensagem("Aluno excluído com sucesso.");
+                    this.view.limpaCampos();
+                } catch (ClassNotFoundException | SQLException ex) {
+                    this.view.mostraMensagem("Não foi possível excluir o aluno. Mensagem retornada: " + ex.getMessage());
+                }
+            }
+        }
+
+        if (((JButton) evt.getSource()).getText().equals("Cancelar")) {
+            this.view.limpaCampos();
         }
 
         if (((JButton) evt.getSource()).getText().equals("OK")) {

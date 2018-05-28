@@ -12,6 +12,7 @@ public class Configuracao implements InterfaceObservable {
 
     private ArrayList<InterfaceObserver> observers;
     private ArrayList<Aluno> alunos;
+    private Funcionario funcionario;
 
     public Configuracao() {
         if (this.observers == null) {
@@ -51,6 +52,24 @@ public class Configuracao implements InterfaceObservable {
         aluno.inserir();
     }
 
+    public void alterarAluno(int matricula, String nome, String curso, String contato, String email) throws ClassNotFoundException, SQLException {
+        Aluno aluno = new Aluno();
+        aluno.buscar(matricula);
+
+        aluno.setNome(nome);
+        aluno.setContato(contato);
+        aluno.setEmail(email);
+        aluno.setCurso(curso);
+
+        aluno.alterar();
+    }
+
+    public void excluirAluno(int matricula) throws ClassNotFoundException, SQLException {
+        Aluno aluno = new Aluno();
+        aluno.buscar(matricula);
+        aluno.excluir();
+    }
+
     public void buscaAlunos() throws SQLException, ClassNotFoundException {
         AlunoDAO alunoDAO = new AlunoDAO();
         this.alunos = alunoDAO.buscaTodos();
@@ -70,12 +89,26 @@ public class Configuracao implements InterfaceObservable {
 
     }
 
+    public Aluno retornaAluno(int matricula) throws ClassNotFoundException, SQLException {
+        Aluno aluno = new Aluno();
+        aluno.buscar(matricula);
+        return aluno;
+    }
+
     public ArrayList<Aluno> getAlunos() {
         return alunos;
     }
 
     public void setAlunos(ArrayList<Aluno> alunos) {
         this.alunos = alunos;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 
 }
