@@ -9,7 +9,7 @@ import javax.swing.JInternalFrame;
  * @author Gabriel
  */
 public class FrmPrincipal extends javax.swing.JFrame {
-    
+
     private static Configuracao model;
 
     /**
@@ -19,18 +19,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(FrmPrincipal.MAXIMIZED_BOTH);
     }
-    
+
     public FrmPrincipal(Configuracao model) {
         this();
         this.model = model;
         this.iniciaFormulario();
     }
-    
+
     private void colocarFormularioCentro(JInternalFrame frame) {
         Dimension desktopSize = this.getSize();
         Dimension jInternalFrameSize = frame.getSize();
         frame.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                 (desktopSize.height - jInternalFrameSize.height) / 2);
+    }
+
+    public boolean verificaLogin() {
+        if (this.model.getFuncionario() == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -138,15 +146,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void jmiAlunoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAlunoActionPerformed
         this.dekstop.removeAll();
-        FrmCadastrarAluno frmCadastrarAluno = new FrmCadastrarAluno(this.model);
-        this.dekstop.add(frmCadastrarAluno);
-        this.colocarFormularioCentro(frmCadastrarAluno);
-        frmCadastrarAluno.setVisible(true);
+        if (this.verificaLogin()) {
+            FrmCadastrarAluno frmCadastrarAluno = new FrmCadastrarAluno(this.model);
+            this.dekstop.add(frmCadastrarAluno);
+            this.colocarFormularioCentro(frmCadastrarAluno);
+            frmCadastrarAluno.setVisible(true);
+        } else {
+            FrmLogin frmLogin = new FrmLogin(this.model);
+            this.dekstop.add(frmLogin);
+            this.colocarFormularioCentro(frmLogin);
+            frmLogin.setVisible(true);
+        }
     }//GEN-LAST:event_jmiAlunoActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         if (this.model.getFuncionario() == null) {
-            FrmLogin frmLogin = new FrmLogin();
+            FrmLogin frmLogin = new FrmLogin(this.model);
             this.dekstop.add(frmLogin);
             this.colocarFormularioCentro(frmLogin);
             frmLogin.setVisible(true);
@@ -154,7 +169,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void jmSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmSairActionPerformed
-       
+
     }//GEN-LAST:event_jmSairActionPerformed
 
     private void jmSairMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_jmSairMenuKeyPressed
@@ -198,5 +213,5 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
     }
-    
+
 }

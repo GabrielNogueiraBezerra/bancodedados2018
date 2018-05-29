@@ -92,6 +92,29 @@ public class FuncionarioDAO {
         }
     }
 
+    public void validaFuncionario(Funcionario funcionario) throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = conexao.prepareStatement("SELECT `id`, `nome`, `contato`, `login`, `senha` FROM `funcionario` WHERE"
+                    + " `login` = ? AND `senha` = ? ");
+            stmt.setString(1, funcionario.getLogin());
+            stmt.setString(2, funcionario.getSenha());
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                funcionario.setId(result.getInt("id"));
+                funcionario.setContato(result.getString("contato"));
+                funcionario.setLogin(result.getString("login"));
+                funcionario.setNome(result.getString("nome"));
+                funcionario.setSenha(result.getString("senha"));
+            }
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt, result);
+        }
+    }
+
     private int find() throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;

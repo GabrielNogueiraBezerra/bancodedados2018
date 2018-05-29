@@ -1,6 +1,7 @@
 package Models;
 
 import DAO.AlunoDAO;
+import DAO.FuncionarioDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -93,6 +94,15 @@ public class Configuracao implements InterfaceObservable {
         Aluno aluno = new Aluno();
         aluno.buscar(matricula);
         return aluno;
+    }
+
+    public void validaUsuario(String usuario, String senha) throws SQLException, ClassNotFoundException {
+        if (this.funcionario == null) {
+            this.funcionario = new Funcionario();
+        }
+        this.funcionario.setLogin(usuario);
+        this.funcionario.setSenha(senha);
+        FuncionarioDAO.getInstancia().validaFuncionario(this.funcionario);
     }
 
     public ArrayList<Aluno> getAlunos() {

@@ -5,17 +5,65 @@
  */
 package Views;
 
+import Controllers.LoginController;
+import Models.Configuracao;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author gabri
  */
 public class FrmLogin extends javax.swing.JInternalFrame {
 
+    private Configuracao model;
+    private LoginController controller;
+
     /**
      * Creates new form FrmLogin
      */
     public FrmLogin() {
         initComponents();
+    }
+
+    public FrmLogin(Configuracao model) {
+        this();
+        this.model = model;
+        this.controller = new LoginController(this, model);
+        this.model.incluir(controller);
+    }
+
+    public void mensagem(String mensagem) {
+        if (mensagem != null) {
+            JOptionPane.showMessageDialog(this, mensagem);
+        }
+    }
+
+    public boolean validaCampos() {
+        if (this.txtUsuario.getText().equals("")) {
+            this.mensagem("Informe o usuário.");
+            this.txtUsuario.requestFocus();
+            return false;
+        }
+
+        if (this.txtSenha.getText().equals("")) {
+            this.mensagem("Informe a senha.");
+            this.txtSenha.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    public String getUsuario() {
+        return this.txtUsuario.getText();
+    }
+
+    public String getSenha() {
+        return this.txtSenha.getText();
+    }
+
+    public void fechaTela() {
+        this.dispose();
     }
 
     /**
@@ -43,8 +91,18 @@ public class FrmLogin extends javax.swing.JInternalFrame {
         jLabel2.setText("Senha:");
 
         btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
         btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,10 +119,10 @@ public class FrmLogin extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel2)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(71, 71, 71)
-                                .addComponent(btnLogin)
+                                .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 80, Short.MAX_VALUE))
+                                .addComponent(btnSair, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)))
+                        .addGap(80, 80, 80))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -92,6 +150,14 @@ public class FrmLogin extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        this.controller.evento(evt);
+    }//GEN-LAST:event_btnSairActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        this.controller.evento(evt);
+    }//GEN-LAST:event_btnLoginActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
