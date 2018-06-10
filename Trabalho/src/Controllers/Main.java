@@ -13,11 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            while (true) {
-                if (Main.principal == null) {
-                    Main.principal = new FrmPrincipal(new Configuracao());
-                }
-            }
+            Main.principal = new FrmPrincipal(new Configuracao());
         } catch (Exception e) {
             e.printStackTrace();
         }

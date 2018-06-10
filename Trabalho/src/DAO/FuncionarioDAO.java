@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Conexao.ConnectionFactory;
+import Models.Aluno;
 import Models.Funcionario;
+import java.util.ArrayList;
 
 /**
  *
@@ -89,6 +91,31 @@ public class FuncionarioDAO {
             }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt, result);
+        }
+    }
+    
+    public ArrayList<Funcionario> buscaTodos() throws SQLException, ClassNotFoundException {
+        
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        ArrayList<Funcionario> funcionarios = new ArrayList<>();
+        try {
+            stmt = conexao.prepareStatement("SELECT * FROM FUNCIONARIO ORDER BY ID");
+            result = stmt.executeQuery();
+            
+            while (result.next()) {
+                Funcionario funcionario = new Funcionario();
+                funcionario.setId(result.getInt("id"));
+                funcionario.setContato(result.getString("contato"));
+                funcionario.setLogin(result.getString("login"));
+                funcionario.setSenha(result.getString("senha"));
+                funcionario.setNome(result.getString("nome"));
+                funcionarios.add(funcionario);
+            }
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt, result);
+            return funcionarios;
         }
     }
 

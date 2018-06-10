@@ -24,6 +24,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Funcion&#xe1;rio"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiFuncionarioActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jmiLivro">
               <Properties>
@@ -35,11 +38,6 @@
         <Menu class="javax.swing.JMenu" name="jmEmprestimo">
           <Properties>
             <Property name="text" type="java.lang.String" value="Emprestimo"/>
-          </Properties>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="jmDevolucao">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Devolu&#xe7;&#xe3;o"/>
           </Properties>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jmSair">

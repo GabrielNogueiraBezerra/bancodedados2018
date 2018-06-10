@@ -57,7 +57,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmiFuncionario = new javax.swing.JMenuItem();
         jmiLivro = new javax.swing.JMenuItem();
         jmEmprestimo = new javax.swing.JMenu();
-        jmDevolucao = new javax.swing.JMenu();
         jmSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -95,6 +94,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmCadastros.add(jmiAluno);
 
         jmiFuncionario.setText("Funcionário");
+        jmiFuncionario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiFuncionarioActionPerformed(evt);
+            }
+        });
         jmCadastros.add(jmiFuncionario);
 
         jmiLivro.setText("Livro");
@@ -104,9 +108,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jmEmprestimo.setText("Emprestimo");
         menu.add(jmEmprestimo);
-
-        jmDevolucao.setText("Devolução");
-        menu.add(jmDevolucao);
 
         jmSair.setText("Sair");
         jmSair.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
@@ -176,10 +177,24 @@ public class FrmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jmSairMenuKeyPressed
 
+    private void jmiFuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiFuncionarioActionPerformed
+        this.dekstop.removeAll();
+        if (this.verificaLogin()) {
+            FrmCadastrarFuncionario frmCadastrarFuncionario = new FrmCadastrarFuncionario(this.model);
+            this.dekstop.add(frmCadastrarFuncionario);
+            this.colocarFormularioCentro(frmCadastrarFuncionario);
+            frmCadastrarFuncionario.setVisible(true);
+        } else {
+            FrmLogin frmLogin = new FrmLogin(this.model);
+            this.dekstop.add(frmLogin);
+            this.colocarFormularioCentro(frmLogin);
+            frmLogin.setVisible(true);
+        }
+    }//GEN-LAST:event_jmiFuncionarioActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane dekstop;
     private javax.swing.JMenu jmCadastros;
-    private javax.swing.JMenu jmDevolucao;
     private javax.swing.JMenu jmEmprestimo;
     private javax.swing.JMenu jmSair;
     private javax.swing.JMenuItem jmiAluno;

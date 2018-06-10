@@ -5,17 +5,112 @@
  */
 package Views;
 
+import Controllers.CadastrarFuncionarioController;
+import Models.Configuracao;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author willi
  */
 public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
 
+    private Configuracao model;
+    private CadastrarFuncionarioController controller;
+
     /**
      * Creates new form FrmCadastrarFuncionario
      */
     public FrmCadastrarFuncionario() {
         initComponents();
+    }
+
+    public FrmCadastrarFuncionario(Configuracao model) {
+        this();
+        this.model = model;
+        this.controller = new CadastrarFuncionarioController(this, model);
+    }
+
+    public void mostraMensagem(String mensagem) {
+        if (mensagem != null) {
+            JOptionPane.showMessageDialog(this, mensagem);
+        }
+    }
+
+    public String getContato() {
+        return this.txtContato.getText().trim();
+    }
+
+    public String getNome() {
+        return this.txtNome.getText().trim();
+    }
+
+    public String getLogin() {
+        return this.txtLogin.getText().trim();
+    }
+
+    public String getSenha() {
+        return this.txtSenha.getText().trim();
+    }
+
+    public void limpaCampos() {
+        this.txtCodigo.setText("");
+        this.txtConfirmarSenha.setText("");
+        this.txtContato.setText("");
+        this.txtLogin.setText("");
+        this.txtNome.setText("");
+        this.txtPesquisa.setText("");
+        this.txtSenha.setText("");
+
+        this.btnSalvar.setText("Salvar");
+        this.btnExcluir.setEnabled(false);
+    }
+
+    public boolean validaCampos() {
+
+        if (this.txtContato.getText().trim().equals("")) {
+            this.mostraMensagem("Informe o contato do funcionario.");
+            this.txtContato.requestFocus();
+
+            return false;
+        }
+
+        if (this.txtNome.getText().trim().equals("")) {
+            this.mostraMensagem("Informe o nome do funcionario.");
+            this.txtNome.requestFocus();
+
+            return false;
+        }
+
+        if (this.txtLogin.getText().trim().equals("")) {
+            this.mostraMensagem("Informe o login do funcionario.");
+            this.txtLogin.requestFocus();
+
+            return false;
+        }
+
+        if (this.txtSenha.getText().trim().equals("")) {
+            this.mostraMensagem("Informe a senha do funcionario.");
+            this.txtSenha.requestFocus();
+
+            return false;
+        }
+
+        if (this.txtConfirmarSenha.getText().trim().equals("")) {
+            this.mostraMensagem("Informe a confirmação de senha do funcionario.");
+            this.txtConfirmarSenha.requestFocus();
+
+            return false;
+        }
+
+        if (!this.txtSenha.getText().trim().equals(this.txtConfirmarSenha.getText().trim())) {
+            this.mostraMensagem("Senhas do funcionario não conferem.");
+            this.txtConfirmarSenha.requestFocus();
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -47,14 +142,19 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txtConfirmarSenha = new javax.swing.JPasswordField();
+        btnExcluir = new javax.swing.JButton();
 
         setClosable(true);
-        setMaximizable(true);
         setTitle("Gerenciamento de funcionario");
 
         jLabel1.setText("Pesquisar");
 
         btnOk.setText("OK");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
 
         tableFuncionario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -76,6 +176,7 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
 
         jLabel2.setText("Código: ");
 
+        txtCodigo.setEditable(false);
         txtCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCodigoActionPerformed(evt);
@@ -101,6 +202,11 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
         jLabel5.setText("Login:");
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
 
@@ -114,57 +220,65 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Senha");
 
+        btnExcluir.setText("Excluir");
+        btnExcluir.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel1))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(btnOk))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel2)
-                .addGap(40, 40, 40)
-                .addComponent(jLabel4))
-            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(txtContato, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel3)
-                .addGap(139, 139, 139)
-                .addComponent(jLabel5))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(txtLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jLabel7)
-                .addGap(140, 140, 140)
-                .addComponent(jLabel6))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(txtConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addComponent(btnCancelar))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnOk))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel2)
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel4))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
+                        .addComponent(txtContato, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel3)
+                        .addGap(139, 139, 139)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(txtLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel7)
+                        .addGap(140, 140, 140)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(txtConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(78, 78, 78)
+                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExcluir)))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,7 +323,9 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
-                    .addComponent(btnSalvar)))
+                    .addComponent(btnSalvar)
+                    .addComponent(btnExcluir))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -231,9 +347,18 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSenhaActionPerformed
 
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        this.controller.evento(evt);
+    }//GEN-LAST:event_btnOkActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        this.controller.evento(evt);
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnOk;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JLabel jLabel1;
