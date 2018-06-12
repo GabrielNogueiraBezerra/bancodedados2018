@@ -7,7 +7,10 @@ package Views;
 
 import Controllers.CadastrarFuncionarioController;
 import Models.Configuracao;
+import Models.Funcionario;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -51,6 +54,18 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
 
     public String getSenha() {
         return this.txtSenha.getText().trim();
+    }
+    
+    public String getCodigo(){
+        return this.txtCodigo.getText().trim();
+    }
+    
+    public String getPesquisa(){
+        return this.txtPesquisa.getText().trim();
+    }
+    
+    public JTable getTableFuncionario(){
+        return this.tableFuncionario;
     }
 
     public void limpaCampos() {
@@ -113,6 +128,25 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
         return true;
     }
 
+    public void limpaTableFuncionarios() {
+        DefaultTableModel tabela = (DefaultTableModel) this.tableFuncionario.getModel();
+        tabela.setNumRows(0);
+    }
+
+    public void preencheCamposAlteracao(Funcionario funcionario) {
+        if (funcionario != null) {
+            this.txtCodigo.setText(String.valueOf(funcionario.getId()));
+            this.txtConfirmarSenha.setText(funcionario.getSenha());
+            this.txtContato.setText(funcionario.getContato());
+            this.txtLogin.setText(funcionario.getLogin());
+            this.txtNome.setText(funcionario.getNome());
+            this.txtSenha.setText(funcionario.getSenha());
+
+            this.btnSalvar.setText("Alterar");
+            this.btnExcluir.setEnabled(true);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -146,8 +180,31 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setTitle("Gerenciamento de funcionario");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosed(evt);
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jLabel1.setText("Pesquisar");
+
+        txtPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPesquisaKeyTyped(evt);
+            }
+        });
 
         btnOk.setText("OK");
         btnOk.addActionListener(new java.awt.event.ActionListener() {
@@ -167,12 +224,29 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableFuncionario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableFuncionarioMouseClicked(evt);
+            }
         });
         jScrollPane1.setViewportView(tableFuncionario);
+        if (tableFuncionario.getColumnModel().getColumnCount() > 0) {
+            tableFuncionario.getColumnModel().getColumn(0).setResizable(false);
+            tableFuncionario.getColumnModel().getColumn(1).setResizable(false);
+            tableFuncionario.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         jLabel2.setText("Código: ");
 
@@ -209,6 +283,11 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
         });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         txtSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -222,6 +301,11 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
 
         btnExcluir.setText("Excluir");
         btnExcluir.setEnabled(false);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -237,9 +321,6 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
                         .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(btnOk))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel2)
@@ -279,6 +360,7 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExcluir)))
                 .addContainerGap(21, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -325,7 +407,7 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
                     .addComponent(btnCancelar)
                     .addComponent(btnSalvar)
                     .addComponent(btnExcluir))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
@@ -354,6 +436,26 @@ public class FrmCadastrarFuncionario extends javax.swing.JInternalFrame {
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         this.controller.evento(evt);
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void txtPesquisaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaKeyTyped
+        this.controller.evento(evt);
+    }//GEN-LAST:event_txtPesquisaKeyTyped
+
+    private void tableFuncionarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFuncionarioMouseClicked
+        this.controller.evento(evt);
+    }//GEN-LAST:event_tableFuncionarioMouseClicked
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.controller.evento(evt);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        this.controller.evento(evt);
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
+        this.controller.evento(evt);
+    }//GEN-LAST:event_formInternalFrameClosed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

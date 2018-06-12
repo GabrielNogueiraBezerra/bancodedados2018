@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import Conexao.ConnectionFactory;
 import Models.Exemplar;
 import Models.Livro;
+import java.util.ArrayList;
 
 /**
  *
@@ -66,6 +67,29 @@ public class ExemplarDAO {
             stmt.executeUpdate();
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
+        }
+    }
+    
+    public ArrayList<Exemplar> buscar(Livro livro) throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        ArrayList<Exemplar> exemplares = new ArrayList<>();
+        try {
+            stmt = conexao.prepareStatement("SELECT `id`, `livro`, `situacao` FROM `exemplar` WHERE `livro` = ?");
+            stmt.setInt(1, livro.getId());
+            result = stmt.executeQuery();
+            
+            while (result.next()) {
+                Exemplar exemplar = new Exemplar();
+                exemplar.setId(result.getInt("id"));
+                exemplar.setSituacao(result.getBoolean("situacao"));
+                exemplar.setLivro(livro);
+                exemplares.add(exemplar);
+            }
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt, result);
+            return exemplares;
         }
     }
 

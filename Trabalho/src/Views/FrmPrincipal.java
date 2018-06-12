@@ -102,11 +102,26 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmCadastros.add(jmiFuncionario);
 
         jmiLivro.setText("Livro");
+        jmiLivro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiLivroActionPerformed(evt);
+            }
+        });
         jmCadastros.add(jmiLivro);
 
         menu.add(jmCadastros);
 
         jmEmprestimo.setText("Emprestimo");
+        jmEmprestimo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jmEmprestimoMouseClicked(evt);
+            }
+        });
+        jmEmprestimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmEmprestimoActionPerformed(evt);
+            }
+        });
         menu.add(jmEmprestimo);
 
         jmSair.setText("Sair");
@@ -191,6 +206,51 @@ public class FrmPrincipal extends javax.swing.JFrame {
             frmLogin.setVisible(true);
         }
     }//GEN-LAST:event_jmiFuncionarioActionPerformed
+
+    private void jmiLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiLivroActionPerformed
+        this.dekstop.removeAll();
+        if (this.verificaLogin()) {
+            FrmCadastrarLivro frmCadastrarLivro = new FrmCadastrarLivro(this.model);
+            this.dekstop.add(frmCadastrarLivro);
+            this.colocarFormularioCentro(frmCadastrarLivro);
+            frmCadastrarLivro.setVisible(true);
+        } else {
+            FrmLogin frmLogin = new FrmLogin(this.model);
+            this.dekstop.add(frmLogin);
+            this.colocarFormularioCentro(frmLogin);
+            frmLogin.setVisible(true);
+        }
+    }//GEN-LAST:event_jmiLivroActionPerformed
+
+    private void jmEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmEmprestimoActionPerformed
+        this.dekstop.removeAll();
+        if (this.verificaLogin()) {
+            FrmEmprestimo frmEmprestimo = new FrmEmprestimo(this.model);
+            this.dekstop.add(frmEmprestimo);
+            this.colocarFormularioCentro(frmEmprestimo);
+            frmEmprestimo.setVisible(true);
+        } else {
+            FrmLogin frmLogin = new FrmLogin(this.model);
+            this.dekstop.add(frmLogin);
+            this.colocarFormularioCentro(frmLogin);
+            frmLogin.setVisible(true);
+        }
+    }//GEN-LAST:event_jmEmprestimoActionPerformed
+
+    private void jmEmprestimoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jmEmprestimoMouseClicked
+        this.dekstop.removeAll();
+        if (this.verificaLogin()) {
+            FrmEmprestimo frmEmprestimo = new FrmEmprestimo(this.model);
+            this.dekstop.add(frmEmprestimo);
+            this.colocarFormularioCentro(frmEmprestimo);
+            frmEmprestimo.setVisible(true);
+        } else {
+            FrmLogin frmLogin = new FrmLogin(this.model);
+            this.dekstop.add(frmLogin);
+            this.colocarFormularioCentro(frmLogin);
+            frmLogin.setVisible(true);
+        }
+    }//GEN-LAST:event_jmEmprestimoMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane dekstop;

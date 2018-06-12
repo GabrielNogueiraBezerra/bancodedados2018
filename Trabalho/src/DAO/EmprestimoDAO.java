@@ -11,6 +11,7 @@ import Models.Aluno;
 import Models.Emprestimo;
 import Models.Exemplar;
 import Models.Funcionario;
+import java.util.ArrayList;
 
 /**
  *
@@ -93,22 +94,144 @@ public class EmprestimoDAO {
                 Aluno aluno = new Aluno();
                 aluno.buscar(result.getInt("aluno"));
                 emprestimo.setAluno(aluno);
-                
+
                 emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
                 emprestimo.setDataPrevista(result.getDate("dataPrevista"));
                 emprestimo.setRenovacoes(result.getInt("renovacoes"));
-                
+
                 Funcionario funcionario = new Funcionario();
                 funcionario.buscar(result.getInt("funcionario"));
                 emprestimo.setFuncionario(funcionario);
-                
+
                 Exemplar exemplar = new Exemplar();
                 exemplar.buscar(result.getInt("exemplar"));
-                
+
                 emprestimo.setExemplar(exemplar);
             }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt, result);
+        }
+    }
+
+    public void buscar(Emprestimo emprestimo, Aluno aluno) throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = conexao.prepareStatement("SELECT `id`, `exemplar`, `aluno`, `dataEmprestimo`, `dataPrevista`, `renovacoes`, `funcionario` FROM `emprestimo` WHERE `aluno` = ?");
+            stmt.setInt(1, aluno.getId());
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                emprestimo.setId(result.getInt("id"));
+                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
+                emprestimo.setDataPrevista(result.getDate("dataPrevista"));
+                emprestimo.setRenovacoes(result.getInt("renovacoes"));
+
+                Funcionario funcionario = new Funcionario();
+                funcionario.buscar(result.getInt("funcionario"));
+                emprestimo.setFuncionario(funcionario);
+
+                Exemplar exemplar = new Exemplar();
+                exemplar.buscar(result.getInt("exemplar"));
+
+                emprestimo.setExemplar(exemplar);
+            }
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt, result);
+        }
+    }
+
+    public void buscar(Emprestimo emprestimo, Exemplar exemplar) throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = conexao.prepareStatement("SELECT `id`, `exemplar`, `aluno`, `dataEmprestimo`, `dataPrevista`, `renovacoes`, `funcionario` FROM `emprestimo` WHERE `exemplar` = ?");
+            stmt.setInt(1, exemplar.getId());
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+
+                Aluno aluno = new Aluno();
+                aluno.buscar(result.getInt("aluno"));
+                emprestimo.setAluno(aluno);
+
+                emprestimo.setId(result.getInt("id"));
+                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
+                emprestimo.setDataPrevista(result.getDate("dataPrevista"));
+                emprestimo.setRenovacoes(result.getInt("renovacoes"));
+
+                Funcionario funcionario = new Funcionario();
+                funcionario.buscar(result.getInt("funcionario"));
+                emprestimo.setFuncionario(funcionario);
+
+                emprestimo.setExemplar(exemplar);
+            }
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt, result);
+        }
+    }
+
+    public void buscar(Emprestimo emprestimo, Aluno aluno, Exemplar exemplar) throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = conexao.prepareStatement("SELECT `id`, `exemplar`, `aluno`, `dataEmprestimo`, `dataPrevista`, `renovacoes`, `funcionario` FROM `emprestimo` WHERE `exemplar` = ? and `aluno` = ?");
+            stmt.setInt(1, exemplar.getId());
+            stmt.setInt(2, aluno.getId());
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                emprestimo.setId(result.getInt("id"));
+                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
+                emprestimo.setDataPrevista(result.getDate("dataPrevista"));
+                emprestimo.setRenovacoes(result.getInt("renovacoes"));
+
+                Funcionario funcionario = new Funcionario();
+                funcionario.buscar(result.getInt("funcionario"));
+                emprestimo.setFuncionario(funcionario);
+
+                emprestimo.setExemplar(exemplar);
+            }
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt, result);
+        }
+    }
+
+    public ArrayList<Emprestimo> buscarTodos() throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        ArrayList<Emprestimo> emprestimos = new ArrayList<>();
+        try {
+            stmt = conexao.prepareStatement("SELECT `exemplar`, `aluno`, `dataEmprestimo`, `dataPrevista`, `renovacoes`, `funcionario` FROM `emprestimo` order by id");
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                Emprestimo emprestimo = new Emprestimo();
+                Aluno aluno = new Aluno();
+                aluno.buscar(result.getInt("aluno"));
+                emprestimo.setAluno(aluno);
+
+                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
+                emprestimo.setDataPrevista(result.getDate("dataPrevista"));
+                emprestimo.setRenovacoes(result.getInt("renovacoes"));
+
+                Funcionario funcionario = new Funcionario();
+                funcionario.buscar(result.getInt("funcionario"));
+                emprestimo.setFuncionario(funcionario);
+
+                Exemplar exemplar = new Exemplar();
+                exemplar.buscar(result.getInt("exemplar"));
+
+                emprestimo.setExemplar(exemplar);
+                emprestimos.add(emprestimo);
+            }
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt, result);
+            return emprestimos;
         }
     }
 

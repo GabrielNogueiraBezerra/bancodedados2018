@@ -1,62 +1,65 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Controllers;
 
-import Models.Aluno;
+import Models.Livro;
 import Models.Configuracao;
-import Views.FrmCadastrarAluno;
 import Models.InterfaceObserver;
+import Views.FrmCadastrarLivro;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.event.InternalFrameEvent;
-import java.awt.event.MouseEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Gabriel
+ * @author gabri
  */
-public class CadastrarAlunoController implements InterfaceObserver {
-
-    private FrmCadastrarAluno view;
+public class CadastrarLivroController implements InterfaceObserver {
+    
+    private FrmCadastrarLivro view;
     private Configuracao model;
-
-    public CadastrarAlunoController(FrmCadastrarAluno view, Configuracao model) {
+    
+    public CadastrarLivroController(FrmCadastrarLivro view, Configuracao model) {
         this.view = view;
         this.model = model;
         this.model.incluir(this);
     }
-
+    
     public void evento(ActionEvent evt) {
         if ((evt.getSource() instanceof JButton)) {
             this.eventoBotao(evt);
         }
-
+        
         this.model.avisarObservers();
     }
-
+    
     public void evento(KeyEvent evt) {
         String caracteres = "0987654321";
         if (!caracteres.contains(evt.getKeyChar() + "")) {
             evt.consume();
         }
     }
-
+    
     public void evento(InternalFrameEvent evt) {
         this.model.excluir(this);
     }
-
+    
     public void evento(MouseEvent evt) {
         if (evt.getClickCount() > 1) {
-            int linha = this.view.getTableAlunos().getSelectedRow();
+            int linha = this.view.getTableLivros().getSelectedRow();
             if (linha >= 0) {
                 try {
-                    this.view.preencheCamposAlteracao(this.model.retornaAluno(Integer.parseInt(
-                            this.view.getTableAlunos().getValueAt(linha, 0).toString())));
-
+                    this.view.preencheCamposAlteracao(this.model.retornaLivro(Integer.parseInt(
+                            this.view.getTableLivros().getValueAt(linha, 0).toString())));
+                    
                 } catch (ClassNotFoundException | SQLException ex) {
                     this.view.mostraMensagem("Não foi possível selecionar aluno. Mensagem retornada: " + ex.getMessage());
                     this.view.limpaCampos();
@@ -64,90 +67,83 @@ public class CadastrarAlunoController implements InterfaceObserver {
             }
         }
     }
-
+    
     private void eventoBotao(ActionEvent evt) {
         if (((JButton) evt.getSource()).getText().equals("Salvar")) {
             if (this.view.validaCampos()) {
                 try {
-                    this.model.salvaAluno(this.view.getNome(), this.view.getCurso(), this.view.getContato(), this.view.getEmail());
-                    this.view.mostraMensagem("Aluno cadastrado com sucesso.");
+                    this.model.salvaLivro(this.view.getAutor(), this.view.getResenha(), this.view.getEdicao(), this.view.getCategoria(), Integer.parseInt(this.view.getQuantidadeExemplares()));
+                    this.view.mostraMensagem("Livro cadastrado com sucesso.");
                     this.view.limpaCampos();
                 } catch (ClassNotFoundException | SQLException ex) {
-                    this.view.mostraMensagem("Não foi possível inserir o aluno. Mensagem retornada: " + ex.getMessage());
+                    this.view.mostraMensagem("Não foi possível inserir o livro. Mensagem retornada: " + ex.getMessage());
                     this.view.limpaCampos();
                 }
             }
         }
-
+        
         if (((JButton) evt.getSource()).getText().equals("Alterar")) {
             if (this.view.validaCampos()) {
                 try {
-                    this.model.alterarAluno(Integer.parseInt(this.view.getMatricula()), this.view.getNome(), this.view.getCurso(), this.view.getContato(), this.view.getEmail());
-                    this.view.mostraMensagem("Aluno alterado com sucesso.");
+                    this.model.alterarLivro(Integer.parseInt(this.view.getCodigo()), this.view.getAutor(), this.view.getResenha(), this.view.getEdicao(), this.view.getCategoria(), Integer.parseInt(this.view.getQuantidadeExemplares()));
+                    this.view.mostraMensagem("Livro alterado com sucesso.");
                     this.view.limpaCampos();
                 } catch (ClassNotFoundException | SQLException ex) {
-                    this.view.mostraMensagem("Não foi possível atualizar o aluno. Mensagem retornada: " + ex.getMessage());
+                    this.view.mostraMensagem("Não foi possível atualizar o livro. Mensagem retornada: " + ex.getMessage());
                     this.view.limpaCampos();
                 }
             }
         }
-
+        
         if (((JButton) evt.getSource()).getText().equals("Excluir")) {
-            if (!this.view.getMatricula().equals("")) {
+            if (!this.view.getCodigo().equals("")) {
                 try {
-                    this.model.excluirAluno(Integer.parseInt(this.view.getMatricula()));
-                    this.view.mostraMensagem("Aluno excluído com sucesso.");
+                    this.model.excluirLivro(Integer.parseInt(this.view.getCodigo()));
+                    this.view.mostraMensagem("Livro excluído com sucesso.");
                     this.view.limpaCampos();
                 } catch (ClassNotFoundException | SQLException ex) {
-                    this.view.mostraMensagem("Não foi possível excluir o aluno. Mensagem retornada: " + ex.getMessage());
+                    this.view.mostraMensagem("Não foi possível excluir o livro. Mensagem retornada: " + ex.getMessage());
                     this.view.limpaCampos();
                 }
             }
         }
-
+        
         if (((JButton) evt.getSource()).getText().equals("Cancelar")) {
             this.view.limpaCampos();
         }
-
+        
         if (((JButton) evt.getSource()).getText().equals("OK")) {
             if (this.view.getPesquisa().equals("")) {
                 try {
-                    this.model.buscaAlunos();
+                    this.model.buscarLivros();
                 } catch (SQLException | ClassNotFoundException ex) {
-                    this.view.mostraMensagem("Não foi possível buscar os alunos. Mensagem retornada: " + ex.getMessage());
+                    this.view.mostraMensagem("Não foi possível buscar os livros. Mensagem retornada: " + ex.getMessage());
                     this.view.limpaCampos();
                 }
             } else {
                 try {
-                    this.model.buscaAluno(Integer.parseInt(this.view.getPesquisa()));
+                    this.model.buscaLivro(Integer.parseInt(this.view.getPesquisa()));
                 } catch (SQLException | ClassNotFoundException ex) {
-                    this.view.mostraMensagem("Não foi possível buscar o aluno. Mensagem retornada: " + ex.getMessage());
+                    this.view.mostraMensagem("Não foi possível buscar o livro. Mensagem retornada: " + ex.getMessage());
                     this.view.limpaCampos();
                 }
             }
         }
     }
-
+    
     @Override
     public void alterar() {
-        ArrayList<Aluno> alunos = this.model.getAlunos();
-        if (alunos != null) {
-            this.view.limpaTableAlunos();
-            String situacao = null;
-
-            for (Aluno aluno : alunos) {
-                if (aluno.isSituacao()) {
-                    situacao = "OK";
-                } else {
-                    situacao = "Devedor";
-                }
-
-                String[] novaLinha = {String.valueOf(aluno.getId()), aluno.getNome(), aluno.getEmail(), situacao};
-                ((DefaultTableModel) this.view.getTableAlunos().getModel()).addRow(novaLinha);
+        
+        ArrayList<Livro> livros = this.model.getLivros();
+        if (livros != null) {
+            this.view.limpaTableLivros();
+            
+            for (Livro livro : livros) {
+                String[] novaLinha = {String.valueOf(livro.getId()), String.valueOf(livro.getTitulo()), livro.getAutor(), livro.getEdicao(), String.valueOf(livro.getTotalExemplares())};
+                ((DefaultTableModel) this.view.getTableLivros().getModel()).addRow(novaLinha);
             }
         }
-
-        this.model.setAlunos(new ArrayList<Aluno>());
-
+        
+        this.model.setLivros(new ArrayList<Livro>());
     }
 }

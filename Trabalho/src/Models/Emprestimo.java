@@ -20,6 +20,7 @@ public class Emprestimo implements InterfaceManter {
     private Funcionario funcionario;
 
     public Emprestimo() {
+        super();
     }
 
     public Emprestimo(Exemplar exemplar, Aluno aluno, Date dataEmprestimo, Date dataPrevista, int renovacoes, Funcionario funcionario) {
@@ -55,6 +56,20 @@ public class Emprestimo implements InterfaceManter {
         if (codigo > 0) {
             this.id = codigo;
             EmprestimoDAO.getInstancia().buscar(this);
+        }
+    }
+
+    public void buscar() throws ClassNotFoundException, SQLException {
+        if (aluno != null && exemplar == null) {
+
+        }
+
+        if (aluno == null && exemplar != null) {
+
+        }
+
+        if (aluno != null && exemplar != null) {
+
         }
     }
 

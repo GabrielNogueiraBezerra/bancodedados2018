@@ -16,6 +16,7 @@ public class Livro implements InterfaceManter {
     private String resenha;
     private String edicao;
     private String categoria;
+    private int totalExemplares;
 
     public Livro() {
         super();
@@ -75,6 +76,14 @@ public class Livro implements InterfaceManter {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public int getTotalExemplares() {
+        return totalExemplares;
+    }
+
+    public void setTotalExemplares(int totalExemplares) {
+        this.totalExemplares = totalExemplares;
     }
 
     @Override

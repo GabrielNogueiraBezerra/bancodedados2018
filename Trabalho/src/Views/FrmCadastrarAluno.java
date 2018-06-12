@@ -35,25 +35,25 @@ public class FrmCadastrarAluno extends javax.swing.JInternalFrame {
     }
     
     public boolean validaCampos() {
-        if (this.txtNome.getText().equals("")) {
+        if (this.txtNome.getText().trim().equals("")) {
             this.mostraMensagem("Informe o nome do aluno.");
             this.txtNome.requestFocus();
             return false;
         }
         
-        if (this.txtCurso.getText().equals("")) {
+        if (this.txtCurso.getText().trim().equals("")) {
             this.mostraMensagem("Informe o curso do aluno.");
             this.txtCurso.requestFocus();
             return false;
         }
         
-        if (this.txtContato.getText().equals("")) {
+        if (this.txtContato.getText().trim().equals("")) {
             this.mostraMensagem("Informe o contato do aluno.");
             this.txtContato.requestFocus();
             return false;
         }
         
-        if (this.txtEmail.getText().equals("")) {
+        if (this.txtEmail.getText().trim().equals("")) {
             this.mostraMensagem("Informe o email do aluno.");
             this.txtEmail.requestFocus();
             return false;
