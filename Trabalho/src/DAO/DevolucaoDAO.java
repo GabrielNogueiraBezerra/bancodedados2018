@@ -33,10 +33,13 @@ public class DevolucaoDAO {
         PreparedStatement stmt = null;
         try {
             stmt = conexao.prepareStatement("INSERT INTO `devolucao`(`id`, `emprestimo`, `funcionario`, `data`, `multa`) VALUES (?, ?, ?, ?, ?)");
+
+            Date dataDevolucao = new Date(devolucao.getData().getYear(), devolucao.getData().getMonth(), devolucao.getData().getDay());
+
             stmt.setInt(1, devolucao.getId());
             stmt.setInt(2, devolucao.getEmprestimo().getId());
             stmt.setInt(3, devolucao.getFuncionario().getId());
-            stmt.setDate(4, (Date) devolucao.getData());
+            stmt.setDate(4, dataDevolucao);
             stmt.setFloat(5, devolucao.getMulta());
 
             stmt.executeUpdate();
@@ -52,9 +55,12 @@ public class DevolucaoDAO {
         PreparedStatement stmt = null;
         try {
             stmt = conexao.prepareStatement("UPDATE `devolucao` SET `emprestimo` = ?,`funcionario` = ?,`data` = ?, `multa` = ? WHERE `id` = ?");
+            
+            Date dataDevolucao = new Date(devolucao.getData().getYear(), devolucao.getData().getMonth(), devolucao.getData().getDay());
+            
             stmt.setInt(1, devolucao.getEmprestimo().getId());
             stmt.setInt(2, devolucao.getFuncionario().getId());
-            stmt.setDate(3, (Date) devolucao.getData());
+            stmt.setDate(3, dataDevolucao);
             stmt.setFloat(4, devolucao.getMulta());
             stmt.setInt(5, devolucao.getId());
             stmt.executeUpdate();
@@ -90,11 +96,38 @@ public class DevolucaoDAO {
                 Emprestimo emprestimo = new Emprestimo();
                 emprestimo.buscar(result.getInt("emprestimo"));
                 devolucao.setEmprestimo(emprestimo);
-                
+
                 Funcionario funcionario = new Funcionario();
                 funcionario.buscar(result.getInt("emprestimo"));
                 devolucao.setFuncionario(funcionario);
+
+                devolucao.setMulta(result.getFloat("multa"));
+            }
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt, result);
+        }
+    }
+
+    public void buscar(Devolucao devolucao, Emprestimo emprestimo) throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = conexao.prepareStatement("SELECT `id`, `emprestimo`, `funcionario`, `data`, `multa` FROM `devolucao` WHERE `emprestimo` = ?   ");
+            stmt.setInt(1, emprestimo.getId());
+            result = stmt.executeQuery();
+
+            while (result.next()) {
                 
+                devolucao.setId(result.getInt("id"));
+                devolucao.setData(result.getDate("data"));
+
+                devolucao.setEmprestimo(emprestimo);
+
+                Funcionario funcionario = new Funcionario();
+                funcionario.buscar(result.getInt("emprestimo"));
+                devolucao.setFuncionario(funcionario);
+
                 devolucao.setMulta(result.getFloat("multa"));
             }
         } finally {

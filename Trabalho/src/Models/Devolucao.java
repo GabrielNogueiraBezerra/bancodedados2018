@@ -104,6 +104,12 @@ public class Devolucao implements InterfaceManter {
         }
     }
 
+    public void buscar() throws SQLException, ClassNotFoundException {
+        if (emprestimo != null) {
+            DevolucaoDAO.getInstancia().buscar(this, emprestimo);
+        }
+    }
+
     @Override
     public void excluir() throws ClassNotFoundException, SQLException {
         if (this.id > 0) {

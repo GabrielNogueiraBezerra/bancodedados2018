@@ -61,15 +61,15 @@ public class Emprestimo implements InterfaceManter {
 
     public void buscar() throws ClassNotFoundException, SQLException {
         if (aluno != null && exemplar == null) {
-
+            EmprestimoDAO.getInstancia().buscar(this, aluno);
         }
 
         if (aluno == null && exemplar != null) {
-
+            EmprestimoDAO.getInstancia().buscar(this, exemplar);
         }
 
         if (aluno != null && exemplar != null) {
-
+            EmprestimoDAO.getInstancia().buscar(this, aluno, exemplar);
         }
     }
 

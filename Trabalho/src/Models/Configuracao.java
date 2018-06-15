@@ -6,6 +6,7 @@ import DAO.ExemplarDAO;
 import DAO.FuncionarioDAO;
 import DAO.LivroDAO;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -98,12 +99,27 @@ public class Configuracao implements InterfaceObservable {
         Exemplar exemplar = this.retornaExemplar(codigoExemplar);
 
         emprestimo.setAluno(aluno);
+
         emprestimo.setDataEmprestimo(new Date());
         emprestimo.setDataPrevista(new Date());
         emprestimo.setExemplar(exemplar);
         emprestimo.setFuncionario(funcionario);
         emprestimo.setRenovacoes(0);
         emprestimo.inserir();
+    }
+
+    public void salvaDevolucao(int codigoEmprestimo) throws ClassNotFoundException, SQLException {
+        Emprestimo emprestimo = new Emprestimo();
+        emprestimo.buscar(codigoEmprestimo);
+
+        Devolucao devolucao = new Devolucao();
+        devolucao.setData(new Date());
+        devolucao.setEmprestimo(emprestimo);
+        devolucao.setFuncionario(this.funcionario);
+
+        devolucao.setMulta((float) 1.5);
+        devolucao.inserir();
+
     }
 
     public void alterarAluno(int matricula, String nome, String curso, String contato, String email) throws ClassNotFoundException, SQLException {
@@ -158,6 +174,16 @@ public class Configuracao implements InterfaceObservable {
         //emprestimo.setFuncionario(funcionario);
         // não posso alterar o numero de renovações para 0 pois não sei quantas houve
         //emprestimo.setRenovacoes(0);
+
+        emprestimo.alterar();
+    }
+
+    public void renovarEmprestimo(int codigoEmprestimo) throws ClassNotFoundException, SQLException {
+        Emprestimo emprestimo = new Emprestimo();
+        emprestimo.buscar(codigoEmprestimo);
+
+        emprestimo.setRenovacoes(emprestimo.getRenovacoes() + 1);
+        emprestimo.setDataPrevista(new Date());
 
         emprestimo.alterar();
     }
@@ -259,6 +285,7 @@ public class Configuracao implements InterfaceObservable {
         switch (escolha) {
             case 0: {
                 emprestimo.buscar(codigo);
+                break;
             }
             case 1: {
                 Aluno aluno = new Aluno();
@@ -267,6 +294,7 @@ public class Configuracao implements InterfaceObservable {
                 emprestimo.setAluno(aluno);
 
                 emprestimo.buscar();
+                break;
             }
 
             case 2: {
@@ -276,6 +304,7 @@ public class Configuracao implements InterfaceObservable {
                 emprestimo.setExemplar(exemplar);
 
                 emprestimo.buscar();
+                break;
             }
         }
 
@@ -316,6 +345,26 @@ public class Configuracao implements InterfaceObservable {
         Emprestimo emprestimo = new Emprestimo();
         emprestimo.buscar(codigo);
         return emprestimo;
+    }
+
+    public String retornaNomeAluno(int codigo) throws ClassNotFoundException, SQLException {
+        Aluno aluno = new Aluno();
+        aluno.buscar(codigo);
+        if (aluno.getNome() != null) {
+            return "Aluno: " + aluno.getNome();
+        } else {
+            return "Aluno";
+        }
+    }
+
+    public String retornaNomeExemplar(int codigo) throws SQLException, ClassNotFoundException {
+        Exemplar exemplar = new Exemplar();
+        exemplar.buscar(codigo);
+        if (exemplar.getLivro() != null && !exemplar.isSituacao()) {
+            return "Exemplar: " + exemplar.getLivro().getTitulo();
+        } else {
+            return "Exemplar";
+        }
     }
 
     public void validaUsuario(String usuario, String senha) throws SQLException, ClassNotFoundException {
@@ -374,7 +423,5 @@ public class Configuracao implements InterfaceObservable {
     public void setEmprestimos(ArrayList<Emprestimo> emprestimos) {
         this.emprestimos = emprestimos;
     }
-    
-    
 
 }

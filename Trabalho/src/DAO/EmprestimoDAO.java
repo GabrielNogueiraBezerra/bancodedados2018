@@ -35,11 +35,16 @@ public class EmprestimoDAO {
         PreparedStatement stmt = null;
         try {
             stmt = conexao.prepareStatement("INSERT INTO `emprestimo`(`id`, `exemplar`, `aluno`, `dataEmprestimo`, `dataPrevista`, `renovacoes`, `funcionario`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+            Date dataEmprestimo = new Date(emprestimo.getDataEmprestimo().getYear(), emprestimo.getDataEmprestimo().getMonth(), emprestimo.getDataEmprestimo().getDay());
+
+            Date dataPrevista = new Date(emprestimo.getDataPrevista().getYear(), emprestimo.getDataPrevista().getMonth(), emprestimo.getDataPrevista().getDay());
+
             stmt.setInt(1, emprestimo.getId());
             stmt.setInt(2, emprestimo.getExemplar().getId());
             stmt.setInt(3, emprestimo.getAluno().getId());
-            stmt.setDate(4, (Date) emprestimo.getDataEmprestimo());
-            stmt.setDate(5, (Date) emprestimo.getDataPrevista());
+            stmt.setDate(4, dataEmprestimo);
+            stmt.setDate(5, dataPrevista);
             stmt.setInt(6, emprestimo.getRenovacoes());
             stmt.setInt(7, emprestimo.getFuncionario().getId());
 
@@ -56,10 +61,15 @@ public class EmprestimoDAO {
         PreparedStatement stmt = null;
         try {
             stmt = conexao.prepareStatement("UPDATE `emprestimo` SET `exemplar` = ?,`aluno` = ?,`dataEmprestimo` = ?, `dataPrevista` = ?, `renovacoes` = ?, `funcionario` = ? WHERE `id` = ?");
+
+            Date dataEmprestimo = new Date(emprestimo.getDataEmprestimo().getYear(), emprestimo.getDataEmprestimo().getMonth(), emprestimo.getDataEmprestimo().getDay());
+
+            Date dataPrevista = new Date(emprestimo.getDataPrevista().getYear(), emprestimo.getDataPrevista().getMonth(), emprestimo.getDataPrevista().getDay());
+            
             stmt.setInt(1, emprestimo.getExemplar().getId());
             stmt.setInt(2, emprestimo.getAluno().getId());
-            stmt.setDate(3, (Date) emprestimo.getDataEmprestimo());
-            stmt.setDate(4, (Date) emprestimo.getDataPrevista());
+            stmt.setDate(3, dataEmprestimo);
+            stmt.setDate(4, dataPrevista);
             stmt.setInt(5, emprestimo.getRenovacoes());
             stmt.setInt(6, emprestimo.getFuncionario().getId());
             stmt.setInt(7, emprestimo.getId());
@@ -95,8 +105,16 @@ public class EmprestimoDAO {
                 aluno.buscar(result.getInt("aluno"));
                 emprestimo.setAluno(aluno);
 
-                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
-                emprestimo.setDataPrevista(result.getDate("dataPrevista"));
+                Date dataEmprestimoBanco = result.getDate("dataEmprestimo");
+
+                java.util.Date dataEmprestimo = new java.util.Date(dataEmprestimoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
+                Date dataPrevisaoBanco = result.getDate("dataPrevista");
+
+                java.util.Date dataPrevisao = new java.util.Date(dataPrevisaoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
+                emprestimo.setDataEmprestimo(dataEmprestimo);
+                emprestimo.setDataPrevista(dataPrevisao);
                 emprestimo.setRenovacoes(result.getInt("renovacoes"));
 
                 Funcionario funcionario = new Funcionario();
@@ -123,9 +141,18 @@ public class EmprestimoDAO {
             result = stmt.executeQuery();
 
             while (result.next()) {
+
+                Date dataEmprestimoBanco = result.getDate("dataEmprestimo");
+
+                java.util.Date dataEmprestimo = new java.util.Date(dataEmprestimoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
+                Date dataPrevisaoBanco = result.getDate("dataPrevista");
+
+                java.util.Date dataPrevisao = new java.util.Date(dataPrevisaoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
                 emprestimo.setId(result.getInt("id"));
-                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
-                emprestimo.setDataPrevista(result.getDate("dataPrevista"));
+                emprestimo.setDataEmprestimo(dataEmprestimo);
+                emprestimo.setDataPrevista(dataPrevisao);
                 emprestimo.setRenovacoes(result.getInt("renovacoes"));
 
                 Funcionario funcionario = new Funcionario();
@@ -157,9 +184,17 @@ public class EmprestimoDAO {
                 aluno.buscar(result.getInt("aluno"));
                 emprestimo.setAluno(aluno);
 
+                Date dataEmprestimoBanco = result.getDate("dataEmprestimo");
+
+                java.util.Date dataEmprestimo = new java.util.Date(dataEmprestimoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
+                Date dataPrevisaoBanco = result.getDate("dataPrevista");
+
+                java.util.Date dataPrevisao = new java.util.Date(dataPrevisaoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
                 emprestimo.setId(result.getInt("id"));
-                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
-                emprestimo.setDataPrevista(result.getDate("dataPrevista"));
+                emprestimo.setDataEmprestimo(dataEmprestimo);
+                emprestimo.setDataPrevista(dataPrevisao);
                 emprestimo.setRenovacoes(result.getInt("renovacoes"));
 
                 Funcionario funcionario = new Funcionario();
@@ -185,8 +220,17 @@ public class EmprestimoDAO {
 
             while (result.next()) {
                 emprestimo.setId(result.getInt("id"));
-                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
-                emprestimo.setDataPrevista(result.getDate("dataPrevista"));
+
+                Date dataEmprestimoBanco = result.getDate("dataEmprestimo");
+
+                java.util.Date dataEmprestimo = new java.util.Date(dataEmprestimoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
+                Date dataPrevisaoBanco = result.getDate("dataPrevista");
+
+                java.util.Date dataPrevisao = new java.util.Date(dataPrevisaoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
+                emprestimo.setDataEmprestimo(dataEmprestimo);
+                emprestimo.setDataPrevista(dataPrevisao);
                 emprestimo.setRenovacoes(result.getInt("renovacoes"));
 
                 Funcionario funcionario = new Funcionario();
@@ -206,7 +250,7 @@ public class EmprestimoDAO {
         ResultSet result = null;
         ArrayList<Emprestimo> emprestimos = new ArrayList<>();
         try {
-            stmt = conexao.prepareStatement("SELECT `exemplar`, `aluno`, `dataEmprestimo`, `dataPrevista`, `renovacoes`, `funcionario` FROM `emprestimo` order by id");
+            stmt = conexao.prepareStatement("SELECT `id`, `exemplar`, `aluno`, `dataEmprestimo`, `dataPrevista`, `renovacoes`, `funcionario` FROM `emprestimo` order by id");
             result = stmt.executeQuery();
 
             while (result.next()) {
@@ -215,8 +259,18 @@ public class EmprestimoDAO {
                 aluno.buscar(result.getInt("aluno"));
                 emprestimo.setAluno(aluno);
 
-                emprestimo.setDataEmprestimo(result.getDate("dataEmprestimo"));
-                emprestimo.setDataPrevista(result.getDate("dataPrevista"));
+                emprestimo.setId(result.getInt("id"));
+
+                Date dataEmprestimoBanco = result.getDate("dataEmprestimo");
+
+                java.util.Date dataEmprestimo = new java.util.Date(dataEmprestimoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
+                Date dataPrevisaoBanco = result.getDate("dataPrevista");
+
+                java.util.Date dataPrevisao = new java.util.Date(dataPrevisaoBanco.getYear(), dataEmprestimoBanco.getMonth(), dataEmprestimoBanco.getDay());
+
+                emprestimo.setDataEmprestimo(dataEmprestimo);
+                emprestimo.setDataPrevista(dataPrevisao);
                 emprestimo.setRenovacoes(result.getInt("renovacoes"));
 
                 Funcionario funcionario = new Funcionario();
