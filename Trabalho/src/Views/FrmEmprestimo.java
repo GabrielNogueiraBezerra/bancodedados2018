@@ -8,6 +8,7 @@ package Views;
 import Controllers.EmprestimoController;
 import Models.Configuracao;
 import Models.Emprestimo;
+import javafx.scene.control.ComboBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -18,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
  * @author gabri
  */
 public class FrmEmprestimo extends javax.swing.JInternalFrame {
-    
+
     private Configuracao model;
     private EmprestimoController controller;
 
@@ -28,72 +29,72 @@ public class FrmEmprestimo extends javax.swing.JInternalFrame {
     public FrmEmprestimo() {
         initComponents();
     }
-    
+
     public FrmEmprestimo(Configuracao model) {
         this();
         this.model = model;
         this.controller = new EmprestimoController(this, model);
     }
-    
+
     public void mostraMensagem(String mensagem) {
         if (mensagem != null) {
             JOptionPane.showMessageDialog(this, mensagem);
         }
     }
-    
+
     public boolean validaCampos() {
         if (this.txtAluno.getText().trim().equals("")) {
             this.mostraMensagem("Informe o aluno do emprestimo.");
             this.txtAluno.requestFocus();
             return false;
         }
-        
+
         if (this.txtExemplar.getText().trim().equals("")) {
             this.mostraMensagem("Informe o exemplar do emprestimo.");
             this.txtAluno.requestFocus();
             return false;
         }
-        
+
         return true;
     }
-    
+
     public void limpaTableEmprestimos() {
         DefaultTableModel tabela = (DefaultTableModel) this.tableEmprestimo.getModel();
         tabela.setNumRows(0);
     }
-    
+
     public JTable getTableEmprestimos() {
         return this.tableEmprestimo;
     }
-    
+
     public String getAluno() {
         return this.txtAluno.getText().trim();
     }
-    
+
     public String getExemplar() {
         return this.txtExemplar.getText().trim();
     }
-    
-    public String getLabelExemplar(){
+
+    public String getLabelExemplar() {
         return this.lblExemplar.getText();
     }
-    
-    public String getLabelAluno(){
+
+    public String getLabelAluno() {
         return this.lblAluno.getText();
     }
-    
+
     public String getCodigo() {
         return this.txtCodigo.getText().trim();
     }
-    
+
     public String getPesquisa() {
         return this.txtPesquisa.getText().trim();
     }
-    
+
     public JComboBox getPesquisarPor() {
         return this.cbPesquisa;
     }
-    
+
     public void limpaCampos() {
         this.txtAluno.setText("");
         this.txtCodigo.setText("");
@@ -101,21 +102,21 @@ public class FrmEmprestimo extends javax.swing.JInternalFrame {
         this.txtPesquisa.setText("");
         this.lblAluno.setText("Aluno");
         this.lblExemplar.setText("Exemplar");
-        
+
         this.btnDevolver.setEnabled(false);
         this.btnExcluir.setEnabled(false);
         this.btnRenovar.setEnabled(false);
         this.btnSalvar.setText("Salvar");
     }
-    
+
     public void addAluno(String titulo) {
         this.lblAluno.setText(titulo);
     }
-    
+
     public void addExemplar(String titulo) {
         this.lblExemplar.setText(titulo);
     }
-    
+
     public void preencheCamposAlteracao(Emprestimo emprestimo) {
         this.lblAluno.setText("Aluno: " + emprestimo.getAluno().getNome());
         this.lblExemplar.setText("Exemplar: " + emprestimo.getExemplar().getLivro().getTitulo());
@@ -127,20 +128,34 @@ public class FrmEmprestimo extends javax.swing.JInternalFrame {
         this.btnRenovar.setEnabled(true);
         this.btnSalvar.setText("Alterar");
     }
-    
+
     public void setExemplar(String exemplar) {
         if (exemplar != null) {
             this.txtExemplar.setText(exemplar);
         }
     }
-    
-    public void requestFocusExemplar(){
+
+    public void requestFocusExemplar() {
         this.txtExemplar.requestFocus();
     }
-    
+
     public void setAluno(String aluno) {
         if (aluno != null) {
             this.txtAluno.setText(aluno);
+        }
+    }
+
+    public JComboBox getComboCons() {
+        return this.cbPesquisa;
+    }
+
+    public String getlblCons() {
+        return this.lblCodigo.getText();
+    }
+
+    public void setlblCons(String texto) {
+        if (texto != null) {
+            this.lblCodigo.setText(texto);
         }
     }
 
@@ -155,7 +170,7 @@ public class FrmEmprestimo extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         cbPesquisa = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
+        lblCodigo = new javax.swing.JLabel();
         txtPesquisa = new javax.swing.JTextField();
         btnOK = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
@@ -196,8 +211,13 @@ public class FrmEmprestimo extends javax.swing.JInternalFrame {
         jLabel1.setText("Pesquisar por:");
 
         cbPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Codigo", "Aluno", "Livro" }));
+        cbPesquisa.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbPesquisaItemStateChanged(evt);
+            }
+        });
 
-        jLabel2.setText("Aluno");
+        lblCodigo.setText("Codigo");
 
         txtPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -339,7 +359,7 @@ public class FrmEmprestimo extends javax.swing.JInternalFrame {
                         .addGap(10, 10, 10)
                         .addComponent(jLabel1)
                         .addGap(161, 161, 161)
-                        .addComponent(jLabel2))
+                        .addComponent(lblCodigo))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(cbPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -381,7 +401,7 @@ public class FrmEmprestimo extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(jLabel1))
-                    .addComponent(jLabel2))
+                    .addComponent(lblCodigo))
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cbPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -481,6 +501,10 @@ public class FrmEmprestimo extends javax.swing.JInternalFrame {
         this.controller.evento(evt);
     }//GEN-LAST:event_txtExemplarFocusLost
 
+    private void cbPesquisaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPesquisaItemStateChanged
+        this.controller.evento(evt);
+    }//GEN-LAST:event_cbPesquisaItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -491,11 +515,11 @@ public class FrmEmprestimo extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbPesquisa;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAluno;
+    private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblExemplar;
     private javax.swing.JTable tableEmprestimo;
     private javax.swing.JTextField txtAluno;

@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextField;
@@ -48,12 +49,31 @@ public class EmprestimoController implements InterfaceObserver {
         }
     }
 
+    public void evento(ItemEvent evt) {
+        switch (this.view.getComboCons().getSelectedIndex()) {
+            case 0: {
+                this.view.setlblCons("Codigo");
+                break;
+            }
+            case 1: {
+                this.view.setlblCons("Aluno");
+                break;
+            }
+            case 2: {
+                this.view.setlblCons("Exemplar");
+                break;
+            }
+        }
+    }
+
     public void evento(FocusEvent evt) {
         if (((JTextField) evt.getSource()).getToolTipText().equals("Aluno")) {
             try {
                 this.view.addAluno(this.model.retornaNomeAluno(Integer.parseInt(this.view.getAluno())));
+
             } catch (ClassNotFoundException | SQLException ex) {
                 this.view.mostraMensagem("Não foi possível buscar nome do aluno. Mensagem retornada: " + ex.getMessage());
+            } finally {
                 if (this.view.getAluno().equals("Aluno")) {
                     this.view.setAluno("");
                 }
